@@ -1,0 +1,103 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 18/03/2016, 09:29:26
+    Author     : Matias
+*/
+
+#envoltura{
+    float:left;
+    padding:10px;
+    width:1330px;
+    height:100px;
+   background-color: #ffffff;
+}
+
+
+header #tit{
+    padding:30px;
+    background: #ffffff;
+    text-align: center;
+    //border:30px;
+    //margin-top:50px;
+    font-size:40px;
+    font-family: fantasy;
+    font-weight: bold;
+    
+    //font-family: 
+}
+#bienvenidos h2{
+    width:100%;
+    color:#fff000;
+    background: #000000;
+}
+
+#bienvenidos{
+    font-family: fantasy;
+    text-size:20px;
+    color: white;
+    background: #3893d4;
+    //padding:20px;
+    padding-bottom: 20px;
+}
+
+
+body{
+    float:left;
+    clear:both;
+    text-align:center;
+    background: #1798af;
+}
+
+#actual{
+    color:white;
+    //background: #8fc9f2;
+    font-weight: bold;
+    font-family: fantasy;
+    text-decoration: bold;
+}
+
+#actual #bien{
+    color:#46da4d;
+}
+
+#actual #regular{
+    color:yellow;
+}
+
+#actual #mal{
+    color: red;
+}
+
+#actual #nAdivinado{
+    color: black;
+}
+
+#actual #ultimo{
+    text-decoration-line: underline;
+}
+
+#actual #cantBien{
+    text-decoration-line: underline;
+}
+
+#actual #cantRegular{
+    text-decoration-line: underline;
+}
+
+#actual #cantMal{
+    text-decoration-line: underline;
+}
+
+#actual #estado{
+    text-decoration-line: underline;
+    font-size: 20px;
+}
+
+#actual #jug{
+    color:orange;
+    font-size: 30px;
+}

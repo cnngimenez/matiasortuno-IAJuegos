@@ -6,11 +6,44 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="tp1.js"></script>
+        <link rel="stylesheet" href="estilotp1.css">
+        <title id="tit">- Busca el Ingenio y la Lógica -</title>
     </head>
+    
     <body>
-        <div>Resolucion Ejercicio 1 Tp1</div>
+
+    
+    <section id="envoltura">
+    <header>
+        <div id="tit">. - + -     Juego Adivina el Número     - + - .</div>
+    </header>
+    </section> 
+        
+    <!--<body onload="cargar()"> !-->
+
+        <!--<div> Se ha cargado la pagina correctamente </div>!-->
+        <section id="bienvenidos">
+        <h2>Bienvenido a el Juego "Adivina el Número!"</h2>
+        
+        <div><br>Por favor, presione "tab" para situarse sobre la celda. A continuación ingrese 4 Dígitos Para Adivinar El Número Oculto:</div>
+        <input type="hidden" id="val" value="">
+        <input type="text" id="i1" onkeyup="alerta()">
+        <!--<div id="nIngresado"><br> Números Ingresados:</div> !-->
+        <input type="hidden" id="num" value=" "><br><br> Intentos Ya Realizados:
+        <div id="intentosNum"> - - - - </div>
+        </section>
+        <section id="actual">
+        <div id="ultimo"><br> Último Intento: </div>
+        <div id="nAdivinado"> - - - - </div>
+        <div id="cantBien"><br> Cantidad Bien:</div><div id="bien"> - </div>
+        <div id="cantRegular"> Cantidad Regular:</div> <div id="regular"> - </div>
+        <div id="cantMal"> Cantidad Mal:</div><div id="mal"> - </div>
+        <div id="estado"><br> Estado del Juego:</div><div id="jug"> Jugando... </div>
+        </section>
+
     </body>
 </html>
