@@ -6,7 +6,6 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type="text/javascript" src="tp1.js"></script>
@@ -15,27 +14,25 @@ and open the template in the editor.
     </head>
     
     <body>
-
-    
     <section id="envoltura">
     <header>
         <div id="tit">. - + -     Juego Adivina el Número     - + - .</div>
     </header>
     </section> 
         
-    <!--<body onload="cargar()"> !-->
-
-        <!--<div> Se ha cargado la pagina correctamente </div>!-->
         <section id="bienvenidos">
         <h2>Bienvenido a el Juego "Adivina el Número!"</h2>
-        
-        <div><br>Por favor, presione "tab" para situarse sobre la celda. A continuación ingrese 4 Dígitos Para Adivinar El Número Oculto:</div>
+        <div>Por favor, presione "tab" para situarse sobre la celda. <br> A continuación ingrese 4 Dígitos Para Adivinar El Número Oculto:</div>
         <input type="hidden" id="val" value="">
         <input type="text" id="i1" onkeyup="alerta()">
-        <!--<div id="nIngresado"><br> Números Ingresados:</div> !-->
-        <input type="hidden" id="num" value=" "><br><br> Intentos Ya Realizados:
+        <input type="hidden" id="cont" value=0>
+        <br><input type="hidden" id="num" value=" "><br><br> Intentos Ya Realizados:
         <div id="intentosNum"> - - - - </div>
+        <section id="contador">
+        <div id="c"><br>Contador de Intentos:</div><div id="nCont"> 0 </div>
         </section>
+        </section>
+        
         <section id="actual">
         <div id="ultimo"><br> Último Intento: </div>
         <div id="nAdivinado"> - - - - </div>
@@ -44,6 +41,6 @@ and open the template in the editor.
         <div id="cantMal"> Cantidad Mal:</div><div id="mal"> - </div>
         <div id="estado"><br> Estado del Juego:</div><div id="jug"> Jugando... </div>
         </section>
-
+        
     </body>
 </html>

@@ -7,16 +7,12 @@
 
 function alerta() {
     var band=true;
-    //Repetir mientras la bandera esté en verdadero:
-    //Obtengo la longitud del elemento que esta ingresando por teclado
     var longitud = document.getElementById("i1").value.length;
     //Si la longitud del numero es menor a 4, debo seguir ingresando digitos
     if (longitud == 4) {
         //Si la longitud del numero ingresado llego a 4, entonces debo
         //generar el numero aleatorio,y luego realizar las verificaciones
         var x2 = document.getElementById("i1").value;
-        //Llamo a método para verificar igualdades
-        //entre el número aleatorio generado, y el número ingresado por usuario
         band= verificar(x2);
         document.getElementById("i1").value="";
     }
@@ -24,9 +20,9 @@ function alerta() {
         document.getElementById("intentosNum").value="";
         document.getElementById("num").value="";
         document.getElementById("intentosNum").innerHTML="";
-        document.getElementById("jug").innerHTML="Felicitaciones!! Has ganado!!";
+        document.getElementById("jug").innerHTML="Felicitaciones!! Has ganado en "+document.getElementById("cont").value+" intentos!!";
         document.getElementById("val").value="";
-        //document.writeln("Felicitaciones!! Has Ganado!!!");
+        document.getElementById("cont").value=0;
     }
 }
 
@@ -43,65 +39,65 @@ function verificar(n2) {
     var bien = 0;
     var regular = 0;
     var mal = 0;
-    //Si no se generó el número aleatorio, genero uno
+    
+    //Si no se generó ya el número aleatorio, genero uno
     if((document.getElementById("val").value).length!=4){
     var n1=generarAleatorio(); 
     document.getElementById("val").value=n1;
     }
     
-    //Separo los digitos y los almaceno en su respectivo arreglo
+    //Separo los digitos (primero de los adivinados y luego del aleatorio,
+    // y los almaceno en su respectivo arreglo
     var nAdivinados= separarDigitos(n2);
     document.getElementById("nAdivinado").innerHTML=nAdivinados;
-    console.log(nAdivinados);
-    
+//    console.log(nAdivinados);
     //Guardo el valor de el nro adivinado para mostrarlo antes de que se modifique
     document.getElementById("num").value=document.getElementById("num").value+" <br> "+"["+nAdivinados+"]";
-
     var num = document.getElementById("val").value;   
     var nAleatorios=separarDigitos(num);
-    
-    console.log(nAleatorios);
-    
+//    console.log(nAleatorios);
+
+    //verifico cuantos números están "bien"
     var res = verificarBien(nAdivinados, nAleatorios);
     bien = res[0].length;
-    console.log('Bien:'); 
-    console.log(bien);
+//    console.log('Bien:'+ bien); 
     document.getElementById("bien").innerHTML=bien;
     nAdivinados = res[1];
-    console.log('nAdivinadosss despues de verificar bien:');
-    console.log(nAdivinados);
+//    console.log('nAdivinadosss despues de verificar bien:');
+//    console.log(nAdivinados);
     
+    //verifico cuántos números están "regulares"
     var res2 = verificarRegulares(nAdivinados, nAleatorios);
-    console.log('Regular:');
-    console.log(res2[0].length);
     regular = res2[0].length;
+//    console.log('Regular:'+regular);
     document.getElementById("regular").innerHTML=regular;
 
-    var mal = 4 - (res[0].length + res2[0].length);
-    console.log('mal:');
-    console.log(mal);
+    //Calculo cuántos números están mal
+//    var mal = 4 - (res[0].length + res2[0].length);
+    var mal = 4 - (bien + regular);
+//    console.log('mal:'+ mal);
     document.getElementById("mal").innerHTML=mal;
     
-    
-    //Almacenando valor para mostrar
-    console.log('valor de value:');
-    console.log(document.getElementById("num").value);
+    //Almacenando valores para mostrar por pantalla los datos
     document.getElementById("num").value=document.getElementById("num").value+"  "+"Bien:"+bien+" Regular:"+regular+ " Mal:"+mal;
     document.getElementById("num").innerHtml=document.getElementById("num").value;
-    console.log('valor de value:');
-    console.log(document.getElementById("num").value);
+//    console.log('valor de value:');
+//    console.log(document.getElementById("num").value);
     
     console.log('valor de numerosIntenados:');
     document.getElementById("intentosNum").value=document.getElementById("num").value;
     document.getElementById("intentosNum").innerHTML=document.getElementById("intentosNum").value;
     console.log(document.getElementById("intentosNum").value);
     
+    //Agrego la sección del contador
+    document.getElementById("cont").value=parseInt(parseInt(document.getElementById("cont").value)+1);
+    document.getElementById("nCont").innerHTML=document.getElementById("cont").value;
+    
     //Si encontré que los 4 dígitos están bien, entonces corto
     if(bien==4){
         band=false;
     }
     return band;
-
 }
 
 //Función en la que ingresa un string con los 4 digitos de un número y 
@@ -131,10 +127,8 @@ function verificarBien(nAd, nAl) {
         }
         else {
             nAdi[k] = nAd[i];
-//        nAle[k]=nAl[i];
             k++;
         }
-
     }
     return resultados;
 }

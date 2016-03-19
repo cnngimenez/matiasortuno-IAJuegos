@@ -21,13 +21,9 @@ header #tit{
     padding:30px;
     background: #ffffff;
     text-align: center;
-    //border:30px;
-    //margin-top:50px;
     font-size:40px;
     font-family: fantasy;
     font-weight: bold;
-    
-    //font-family: 
 }
 #bienvenidos h2{
     width:100%;
@@ -40,7 +36,6 @@ header #tit{
     text-size:20px;
     color: white;
     background: #3893d4;
-    //padding:20px;
     padding-bottom: 20px;
 }
 
@@ -54,7 +49,6 @@ body{
 
 #actual{
     color:white;
-    //background: #8fc9f2;
     font-weight: bold;
     font-family: fantasy;
     text-decoration: bold;
