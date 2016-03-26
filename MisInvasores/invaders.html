@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Invasores!</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="phaser.min.js"></script>
+    </head>
+
+
+
+    <body>
+        <div>Bienvenido a invasores espaciales</div>
+
+        <script type="text/javascript">
+
+            //Creo el juego con sus dimensiones  y secciones necesarias para la ejecucion
+            var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', {preload: preload, create: create, update: update});
+            
+            //Precarga: cargo todos los recursos a utilizar en el juego
+            function preload() {
+
+                game.load.image('balaJugador', 'assets/bullet.png');
+                game.load.image('balaEnemiga', 'assets/enemy-bullet.png');
+                game.load.spritesheet('invasor', 'assets/invader32x32x4.png', 32, 32);
+//                game.load.image('naveJugador', 'assets/player.png');
+                game.load.spritesheet('naveJugador', 'assets/player.png',40,40);
+                game.load.spritesheet('explosion', 'assets/explode.png', 128, 128);
+                game.load.image('fondoEstrellas', 'assets/starfield.png');
+                game.load.image('balaActual','assets/balas.png');
+//                game.load.image('naveDerecha.png','assets/naveDerecha.png');
+                //game.load.image('background', 'assets/background2.png');
+                game.load.audio('disparoJugador',['assets/disparoPlayer.mp3'],'assets/disparoPlayer.ogg');
+                game.load.audio('disparoAlien',['assets/disparoAlien.mp3'],'assets/disparoAlien.ogg');
+                game.load.audio('explosionAlien',['assets/expAlien.mp3'],'assets/expAlien.ogg');
+                game.load.audio('musicaDeepSpace', ['assets/deepSpace.mp3'], 'assets/deepSpace.ogg');
+                game.load.audio('sonidoExplosion',['assets/explo.mp3'],'assets/explo.ogg');
+                game.load.audio('sonidoInicio',['assets/inicio.mp3'],'assets/inicio.ogg');
+                game.load.audio('sonidoVictoria',['assets/victoria.mp3'],'assets/victoria.ogg');
+                game.load.audio('sonidoDerrota',['assets/derrota.mp3'],'assets/derrota.ogg');
+                
+                game.load.bitmapFont('carrier_command', 'assets/carrier_command.png', 'assets/carrier_command.xml');
+//                game.load.bitmapFont('desyrel', 'assets/desyrel.png', 'assets/desyrel.xml');
+
+            }
+            
+            //Definicion de variables necesarias para el juego
+            var jugador;
+            var aliens;
+            var balasJug;
+            var tiempoBala = 0;
+            var cursors;
+            var botonDisparo;
+            var explosiones;
+            var fondoEstrellas;
+            var puntos = 0;
+            var puntajeString = '';
+            var puntajeTexto;
+            var vidas;
+            var balaEnemiga;
+            var temporizadorDisparo = 0;
+            var stateText;
+            var enemigosVivos = [];
+            var bpmText;
+            var balas = 50;
+            var cantBalasString;
+            var balasRestantesTexto;
+
+            //Creacion y asignacion de dimensiones, creacion de los elementos principales del juego
+            function create() {
+                game.physics.startSystem(Phaser.Physics.ARCADE);
+                
+                //Asigno los sonidos a variables para utilizarlos
+                disparoJugador=game.add.audio('disparoJugador');
+                disparoAlien=game.add.audio('disparoAlien');
+                explosionAlien=game.add.audio('explosionAlien');
+                music = game.add.audio('musicaDeepSpace');
+                music.play();
+                sonidoExplosion=game.add.audio('sonidoExplosion');
+                sonidoInicio=game.add.audio('sonidoInicio');
+                sonidoVictoria=game.add.audio('sonidoVictoria');
+                sonidoDerrota=game.add.audio('sonidoDerrota');
+                sonidoInicio.play();
+                
+                //Probando letras
+//                bmpText = game.add.bitmapText(200, 100, 'carrier_command', 'Testing CARRIER!!', 64);
+//                
+                //Creacion del background, de tipo tileSprite, lo que permite moverlo
+                //Parametros: ejes de coordinadas x e y en el mundo
+                //Y Ancho, alto y nombre del archivo asociado.
+                fondoEstrellas = game.add.tileSprite(0, 0, 800, 600, 'fondoEstrellas');
+
+                //  Grupo formado por las balas del jugador
+                balasJug = game.add.group();
+                balasJug.enableBody = true;
+                balasJug.physicsBodyType = Phaser.Physics.ARCADE;
+                
+                //Aclaracion sobre "createMultiple":
+                //createMultiple(quantity, key, frame, exists)
+                //Creates multiple Phaser.Sprite objects and adds them to the top of this group.
+                //Useful if you need to quickly generate a pool of identical sprites, such as bullets.
+                //By default the sprites will be set to not exist and will be positioned at 0, 0 (relative to the group.x/y). Use classType to change the type of object created.
+                //Para este caso usamos dos de los parametros: cantidad de sprites a crear y el tipo de imagen a utilizar
+                balasJug.createMultiple(30, 'balaJugador');
+                //Definimos posicionamiento en diagonal
+                balasJug.setAll('anchor.x', 0.5);
+                balasJug.setAll('anchor.y', 1);
+                //Definimos que las balas chequeen los limites del mundo y se destruyan al propasarlos
+                balasJug.setAll('outOfBoundsKill', true);
+                balasJug.setAll('checkWorldBounds', true);
+
+                // Grupo que conformarán las balas de los enemigos
+                enemyBullets = game.add.group();
+                enemyBullets.enableBody = true;
+                enemyBullets.physicsBodyType = Phaser.Physics.ARCADE;
+                enemyBullets.createMultiple(30, 'balaEnemiga');
+                //Definimos el ancho y alto
+                enemyBullets.setAll('anchor.x', 0.5);
+                enemyBullets.setAll('anchor.y', 1);
+                //Definimos que las balas chequeen los limites del mundo y se destruyan al propasarlos
+                enemyBullets.setAll('outOfBoundsKill', true);
+                enemyBullets.setAll('checkWorldBounds', true);
+
+                //  Creamos nuestra nave
+                jugador = game.add.sprite(400, 500, 'naveJugador');
+                jugador.anchor.setTo(0.5, 0.5);
+                game.physics.enable(jugador, Phaser.Physics.ARCADE);
+
+                //  Creamos el grupo para los enemigos
+                aliens = game.add.group();
+                aliens.enableBody = true;
+                aliens.physicsBodyType = Phaser.Physics.ARCADE;
+               
+                
+                //Creamos los aliens
+                crearAliens();
+                //Defino variable para controlar cantidad de balas restantes
+                cantBalasString = 'Balas Restantes:';
+                balasRestantesTexto = game.add.text(70,550,cantBalasString + balas,{font: '24px Arial',fill: '#fff'});  
+                game.add.sprite(10,540,'balaActual');
+                //  Definimos varible para almacenar los puntajes
+                puntajeString = 'Puntaje : ';
+                puntajeTexto = game.add.text(10, 10, puntajeString + puntos, {font: '24px Arial', fill: '#fff'});
+
+                //  Definimos el grupo 'vidas' para que no tenga únicamente una
+                vidas = game.add.group();
+                game.add.text(game.world.width - 120, 10, 'Vidas : ', {font: '26px Arial', fill: '#fff'});
+
+                //  Definimos un estado del juego para poder reiniciar el mismo
+                stateText = game.add.text(game.world.centerX, game.world.centerY, ' ', {font: '70px Arial', fill: '#fff'});
+                stateText.anchor.setTo(0.5, 0.5);
+                stateText.visible = false;
+
+                //Creamos el gráfico para indicar cuántas vidas tenemos disponible
+                for (var i = 0; i < 3; i++)
+                {
+                    var naveJugador = vidas.create(game.world.width - 100 + (40 * i), 80, 'naveJugador');
+                    //Definimos posicion, angulo y transparencia de las "vidas"
+                    naveJugador.scale.setTo(0.7,0.7);
+                    naveJugador.anchor.setTo(1, 0.5);
+                    naveJugador.angle = 90;
+                    naveJugador.alpha = 0.8;
+                }
+
+                //  Grupo para las explosiones al explotar las naves
+                explosiones = game.add.group();
+                explosiones.createMultiple(30, 'explosion');
+                //Cada vez que explote un alien estara asociado a la explosion creada
+                explosiones.forEach(setupInvader, this);
+
+                //  Añadimos los cursores para poder jugar
+                //  Definiremos cursores para moverse a izquierda y derecha, arriba y abajo 
+                //  Con la barra espaciadora la nave podrá disparar
+                cursors = game.input.keyboard.createCursorKeys();
+                botonDisparo = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+                
+                //Agregando texto capa superior
+                bmpText = game.add.bitmapText(50, 200, 'carrier_command', '', 40);
+            }
+
+            //Funcion con la cual crearemos las naves enemigas
+            function crearAliens() {
+                //Crearemos 4 filas de 10 aliens cada una
+                for (var y = 0; y < 4; y++)
+                {
+                    for (var x = 0; x < 10; x++)
+                    {
+                        var alien = aliens.create(x * 48, y * 50, 'invasor');
+                        alien.anchor.setTo(0.5, 0.5);
+                        alien.animations.add('fly', [0, 1, 2, 3], 20, true);
+                        alien.play('fly');
+                        alien.body.moves = false;
+                    }
+                }
+                //Posiciono todo el grupo de aliens
+                aliens.x = 100;
+                aliens.y = 50;
+                //Hacemos que los aliens comiencen a moverse (lo hacemos mediante el grupo entero)
+                var tween = game.add.tween(aliens).to({x: 200}, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+
+                //  Enemigos suben/bajan
+                tween.onLoop.add(descend, this);
+            }
+
+            function setupInvader(invasor) {
+                invasor.anchor.x = 0.5;
+                invasor.anchor.y = 0.5;
+                invasor.animations.add('explosion');
+
+            }
+
+            function descend() {
+               aliens.y += 10;
+            }
+
+
+            function update() {
+                //  Hacemos que el fondo se mueva
+                fondoEstrellas.tilePosition.y += 2;
+                
+                //Si el jugador esta vivo, creado
+                if (jugador.alive)
+                {
+                    //  Inicializamos al jugador con velocidad 0
+                    jugador.body.velocity.setTo(0, 0);
+                    //Definimos el movimiento a la izquiera y derecha
+                    if (cursors.left.isDown)
+                    {
+                        jugador.body.velocity.x = -200;
+                        jugador.animations.add('volarIzquierda', [0], 2, true);
+                        jugador.play('volarIzquierda');
+                    }
+                    else if (cursors.right.isDown)
+                    {
+                        jugador.body.velocity.x = 200;
+                        jugador.animations.add('volarDerecha', [2], 2, true);
+                        jugador.play('volarDerecha');
+                    }
+                    else{
+                        jugador.animations.add('volarDerecho',[1],2,true);
+                        jugador.play('volarDerecho');
+                    }
+                    
+                    if(cursors.up.isDown){
+                        jugador.body.velocity.y=-100;
+                    }
+                    if(cursors.down.isDown){
+                        jugador.body.velocity.y=+100;
+                    }
+
+                    //  Definimos los disparos
+                    if (botonDisparo.isDown)
+                    {
+                        disparaJugador();
+                        disparoJugador.play(); 
+                    }
+                    //  Definimos el tiempo entre disparos del enemigo
+                    if (game.time.now > temporizadorDisparo)
+                    {
+                        disparaAlien();
+                    }
+
+                    //  Definimos las colisiones entre elementos
+                    //Aclaracion Overlap:
+                    // overlap(object1, object2, overlapCallback, processCallback, callbackContext) → {boolean}
+                    //Checks for overlaps between two game objects. The objects can be Sprites, Groups or Emitters. 
+                    //You can perform Sprite vs. Sprite, Sprite vs. Group and Group vs. Group overlap checks.
+                    // Unlike collide the objects are NOT automatically separated or have any physics applied, 
+                    // they merely test for overlap results. Both the first and second parameter can be arrays of objects,
+                    //  of differing types. If two arrays are passed, the contents of the first parameter will be tested 
+                    //  against all contents of the 2nd parameter. NOTE: This function is not recursive, and will not 
+                    //  test against children of objects passed (i.e. Groups within Groups).
+                    //  
+                    //  Aclaracion del parametro overlapCallBack:
+                    //An optional callback function that is called if the objects overlap. 
+                    //The two objects will be passed to this function in the same order in which you specified them, 
+                    //unless you are checking Group vs. Sprite, in which case Sprite will always be the first parameter.
+                    game.physics.arcade.overlap(balasJug, aliens, destruyoAlien, null, this);
+                    game.physics.arcade.overlap(enemyBullets, jugador, alienMePega, null, this);
+                }
+
+            }
+
+
+            function destruyoAlien(balaJugador, alien) {
+
+                //  Cuando la bala colisiona con un alien, se destruyen ambos objetos
+                balaJugador.kill();
+                alien.kill();
+
+                //  Incrementamos el puntaje por haber matado una nave enemiga
+                puntos += 20;
+                puntajeTexto.text = puntajeString + puntos;
+
+                //  Añadimos la explosion causada por el impacto sobre la posicion del alien
+                var explosion = explosiones.getFirstExists(false);
+                explosion.reset(alien.body.x, alien.body.y);
+                explosion.play('explosion', 30, false, true);
+                explosionAlien.play();
+
+                //Si no quedan aliens vivos, aumentamos los puntajes y damos el mensaje de sonidoVictoria
+                if (aliens.countLiving() == 0)
+                {
+                    puntos += 1000;
+                    puntajeTexto.text = puntajeString + puntos;
+
+                    enemyBullets.callAll('kill', this);
+                    bmpText.text = '   Ganaste!!!\n\n    Haz Click \n\n para Reiniciar';
+//                    stateText.text = " Ganaste, \n Haz click para reiniciar";
+//                    stateText.visible = true;
+                    sonidoVictoria.play();
+                    
+
+                    //El manejador del evento para reiniciar
+                    game.input.onTap.addOnce(restart, this);
+                    //bmpText.text = '';
+                }
+
+            }
+
+            function alienMePega(jugador, balaJugador) {
+
+                balaJugador.kill();
+
+                live = vidas.getFirstAlive();
+
+                if (live)
+                {
+                    live.kill();
+                }
+
+                //  Creamos la explosion producida por impacto
+                var explosion = explosiones.getFirstExists(false);
+                explosion.reset(jugador.body.x, jugador.body.y);
+                explosion.play('explosion', 30, false, true);
+                sonidoExplosion.play();
+
+                // Si no nos quedan mas vidas, perdemos y el juego finaliza
+                if (vidas.countLiving() < 1)
+                {
+                    jugador.kill();
+                    enemyBullets.callAll('kill');
+                    
+                    
+                    informarDerrota('1');
+//                    bmpText.text = '   Perdiste..\n\n    Haz Click \n\n para Reiniciar';
+////                    stateText.text = " GAME OVER \n Haz click para reiniciar";
+////                    stateText.visible = true;
+//
+//                    //Manejador de evento para reiniciar juego
+//                    game.input.onTap.addOnce(restart, this);
+                }
+
+            }
+            
+            function informarDerrota(num){
+                console.log(num);
+                console.log(num=='1');
+                if(num==='1'){
+                    bmpText.text = '   Perdiste..\n\n    Haz Click \n\n para Reiniciar';
+//                    stateText.text = " GAME OVER \n Haz click para reiniciar";
+//                    stateText.visible = true;
+
+                    //Manejador de evento para reiniciar juego
+                }
+                else{
+                    bmpText.text = 'Te quedaste sin \n\n      balas..\n\n    Haz Click \n\n para Reiniciar';
+                }
+                    sonidoDerrota.play();
+                    game.input.onTap.addOnce(restart, this);
+            }
+
+            function disparaAlien() {
+                //  Tomamos la primer bala existente
+                balaEnemiga = enemyBullets.getFirstExists(false);
+                enemigosVivos.length = 0;
+                //Por cada alien "vivo", lo almacenamos en un array
+                aliens.forEachAlive(function (alien) {
+                    // Ponemos todos los aliens vivos en un array
+                    enemigosVivos.push(alien);
+                });
+                //Si existe alguna bala y hay algun enemigo vivo que disparo
+                if (balaEnemiga && enemigosVivos.length > 0)
+                {
+                    //generamos un valor random
+                    var random = game.rnd.integerInRange(0, enemigosVivos.length - 1);
+
+                    // Seleccionamos aleatoriamente un alien que disparara
+                    var shooter = enemigosVivos[random];
+                    // El alien disparador realiza el disparo
+                    balaEnemiga.reset(shooter.body.x, shooter.body.y);
+                    disparoAlien.play();
+                    //funcion brinada por el tipo de juego arcade, en el cual un objeto se mueve hacia otro
+                    game.physics.arcade.moveToObject(balaEnemiga, jugador, 300);
+                    //Temporizador para realizar disparos
+                    temporizadorDisparo = game.time.now + 2000;
+                }
+
+            }
+
+            function disparaJugador() {
+
+                //  Definimos un limite de tiempo para que no disparen constantemente
+                if (game.time.now > tiempoBala)
+                {
+                    //  Tomamos la primer bala existente del grupo
+                    balaJugador = balasJug.getFirstExists(false);
+
+                    if (balaJugador)
+                    {
+                        //  Realizamos el disparo
+                        balaJugador.reset(jugador.x, jugador.y + 10);
+                        balaJugador.body.velocity.y = -400;
+                        tiempoBala = game.time.now + 200;
+                        balas-=1;
+                        if(balas == 0){
+                            //Mostrar cartel de derrota!!
+                            jugador.kill();
+                            informarDerrota('2');
+                        }
+                        balasRestantesTexto.text=cantBalasString+balas;
+                    }
+                }
+
+            }
+
+
+
+            function restart() {
+                //  Se reinicia y comienza el nivel nuevamente
+                //Debemos setear las vidas
+                vidas.callAll('revive');
+                //  Debemos eliminar y volver a crear a los aliens enemigos
+                aliens.removeAll();
+                crearAliens();
+                //Revivimos al jugador
+                jugador.revive();
+                //Escondemos el texto de reinicio de juego
+                stateText.visible = false;
+                bmpText.text = '';
+                balas = 50;
+                balasRestantesTexto.text = cantBalasString+balas;
+                puntos=0;
+                puntajeTexto.text = puntajeString + puntos;
+            }
+
+
+        </script>
+
+
+
+
+
+    </body>
+</html>
