@@ -499,21 +499,21 @@ and open the template in the editor.
             }
             
             //Funcion para generar un escudo al atrapar un bonus De Escudo
-            function generoBonusEscudo(){
-               bonusDeEscudo =  bonusEsc.getFirstExists(false);
-               bonusDeEscudo.scale.setTo(0.5,0.5);
-               if(bonusDeEscudo){
-                   var randomX = game.rnd.integerInRange(0, 800);
-//                     var randomY = game.rnd.integerInRange(,600);
-                    bonusDeEscudo.reset(randomX,0);
-                    bonusDeEscudo.body.velocity.y=+250;
-               }
-            }
-            
-            function obtengoEscudo(jugador,escudoDeBonus){
-                escudoDeBonus.kill();
-                game.add.sprite(jugador.x-60,jugador.y-50,'escudoDeNave');
-            }
+//            function generoBonusEscudo(){
+//               bonusDeEscudo =  bonusEsc.getFirstExists(false);
+//               bonusDeEscudo.scale.setTo(0.5,0.5);
+//               if(bonusDeEscudo){
+//                   var randomX = game.rnd.integerInRange(0, 800);
+////                     var randomY = game.rnd.integerInRange(,600);
+//                    bonusDeEscudo.reset(randomX,0);
+//                    bonusDeEscudo.body.velocity.y=+250;
+//               }
+//            }
+//            
+//            function obtengoEscudo(jugador,escudoDeBonus){
+//                escudoDeBonus.kill();
+//                game.add.sprite(jugador.x-60,jugador.y-50,'escudoDeNave');
+//            }
             
             //Funcion para generar puntos de oro extra
             function generoPuntoOro(){
