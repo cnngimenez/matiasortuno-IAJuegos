@@ -33,12 +33,15 @@ and open the template in the editor.
 
                 game.load.image('balaJugador', 'assets/bullet.png');
                 game.load.image('balaEnemiga', 'assets/enemy-bullet.png');
-                game.load.spritesheet('invasor', 'assets/invader32x32x4.png', 32, 32);
+                game.load.spritesheet('invasor', 'assets/invasor.png', 32, 32);
 //                game.load.image('naveJugador', 'assets/player.png');
                 game.load.spritesheet('naveJugador', 'assets/player.png',40,40);
                 game.load.spritesheet('explosion', 'assets/explode.png', 128, 128);
                 game.load.image('fondoEstrellas', 'assets/starfield.png');
                 game.load.image('balaActual','assets/balas.png');
+                game.load.image('puntosOro','assets/puntosOro.png')
+                game.load.image('bonusDeEscudo','assets/bonusEscudo.png')
+                game.load.image('escudoDeNave','assets/escudoNave.png')
 //                game.load.image('naveDerecha.png','assets/naveDerecha.png');
                 //game.load.image('background', 'assets/background2.png');
                 game.load.audio('disparoJugador',['assets/disparoPlayer.mp3'],'assets/disparoPlayer.ogg');
@@ -49,6 +52,7 @@ and open the template in the editor.
                 game.load.audio('sonidoInicio',['assets/inicio.mp3'],'assets/inicio.ogg');
                 game.load.audio('sonidoVictoria',['assets/victoria.mp3'],'assets/victoria.ogg');
                 game.load.audio('sonidoDerrota',['assets/derrota.mp3'],'assets/derrota.ogg');
+                game.load.audio('sonidoMoneda',['assets/moneda.mp3'],'assets/moneda.ogg');
                 
                 game.load.bitmapFont('carrier_command', 'assets/carrier_command.png', 'assets/carrier_command.xml');
 //                game.load.bitmapFont('desyrel', 'assets/desyrel.png', 'assets/desyrel.xml');
@@ -76,6 +80,11 @@ and open the template in the editor.
             var balas = 50;
             var cantBalasString;
             var balasRestantesTexto;
+            var puntosO;
+            var tempo=100;
+            var tempoEsc=500;
+            var bonusEsc;
+            var escNave
 
             //Creacion y asignacion de dimensiones, creacion de los elementos principales del juego
             function create() {
@@ -91,6 +100,7 @@ and open the template in the editor.
                 sonidoInicio=game.add.audio('sonidoInicio');
                 sonidoVictoria=game.add.audio('sonidoVictoria');
                 sonidoDerrota=game.add.audio('sonidoDerrota');
+                sonidoMoneda=game.add.audio('sonidoMoneda');
                 sonidoInicio.play();
                 
                 //Probando letras
@@ -131,6 +141,33 @@ and open the template in the editor.
                 //Definimos que las balas chequeen los limites del mundo y se destruyan al propasarlos
                 enemyBullets.setAll('outOfBoundsKill', true);
                 enemyBullets.setAll('checkWorldBounds', true);
+                
+                //probando agregar mas puntos..
+                puntosO = game.add.group();
+                puntosO.enableBody = true;
+                puntosO.physicsBodyType = Phaser.Physics.ARCADE;
+                puntosO.createMultiple(30, 'puntosOro');
+                //Definimos el ancho y alto
+                puntosO.setAll('anchor.x', 0.5);
+                puntosO.setAll('anchor.y', 1);
+                //Definimos que las balas chequeen los limites del mundo y se destruyan al propasarlos
+                puntosO.setAll('outOfBoundsKill', true);
+                puntosO.setAll('checkWorldBounds', true);
+                
+                //Probando generar bonus para nave
+                 bonusEsc = game.add.group();
+                bonusEsc.enableBody = true;
+                bonusEsc.physicsBodyType = Phaser.Physics.ARCADE;
+                bonusEsc.createMultiple(30, 'bonusDeEscudo');
+                //Definimos el ancho y alto
+                bonusEsc.setAll('anchor.x', 0.5);
+                bonusEsc.setAll('anchor.y', 1);
+                //Definimos que las balas chequeen los limites del mundo y se destruyan al propasarlos
+                bonusEsc.setAll('outOfBoundsKill', true);
+                bonusEsc.setAll('checkWorldBounds', true);
+                
+                
+                
 
                 //  Creamos nuestra nave
                 jugador = game.add.sprite(400, 500, 'naveJugador');
@@ -187,6 +224,13 @@ and open the template in the editor.
                 
                 //Agregando texto capa superior
                 bmpText = game.add.bitmapText(50, 200, 'carrier_command', '', 40);
+                
+                console.log('pasaaaaaa');
+                
+//               monedaOro.physics.enable(jugador, Phaser.Physics.ARCADE);
+//               monedaOro.enableBody=true;
+//               monedaOro.anchor.setTo(0.5,0.5);
+               
             }
 
             //Funcion con la cual crearemos las naves enemigas
@@ -228,7 +272,7 @@ and open the template in the editor.
             function update() {
                 //  Hacemos que el fondo se mueva
                 fondoEstrellas.tilePosition.y += 2;
-                
+               
                 //Si el jugador esta vivo, creado
                 if (jugador.alive)
                 {
@@ -268,8 +312,24 @@ and open the template in the editor.
                     //  Definimos el tiempo entre disparos del enemigo
                     if (game.time.now > temporizadorDisparo)
                     {
+                        console.log('entra en disparo alien');
                         disparaAlien();
                     }
+                    
+                    //Para generar bonus de escudo (a futuro..)
+//                    if(game.time.now > tempoEsc){
+////                        console.log('entra');
+//                        generoBonusEscudo();
+//                        tempoEsc=game.time.now+6000;
+//                    }
+                    
+                    //Genero puntos de oro 
+                    if(game.time.now > tempo){
+//                        console.log('entra');
+                        generoPuntoOro();
+                        tempo=game.time.now+2000;
+                    }
+
 
                     //  Definimos las colisiones entre elementos
                     //Aclaracion Overlap:
@@ -288,6 +348,9 @@ and open the template in the editor.
                     //unless you are checking Group vs. Sprite, in which case Sprite will always be the first parameter.
                     game.physics.arcade.overlap(balasJug, aliens, destruyoAlien, null, this);
                     game.physics.arcade.overlap(enemyBullets, jugador, alienMePega, null, this);
+                    game.physics.arcade.overlap(puntosO, jugador, ganoPuntos,null, this);
+//                    game.physics.arcade.overlap(bonusEsc,jugador,obtengoEscudo,null,this);
+                    
                 }
 
             }
@@ -434,8 +497,40 @@ and open the template in the editor.
                 }
 
             }
-
-
+            
+            //Funcion para generar un escudo al atrapar un bonus De Escudo
+            function generoBonusEscudo(){
+               bonusDeEscudo =  bonusEsc.getFirstExists(false);
+               bonusDeEscudo.scale.setTo(0.5,0.5);
+               if(bonusDeEscudo){
+                   var randomX = game.rnd.integerInRange(0, 800);
+//                     var randomY = game.rnd.integerInRange(,600);
+                    bonusDeEscudo.reset(randomX,0);
+                    bonusDeEscudo.body.velocity.y=+250;
+               }
+            }
+            
+            function obtengoEscudo(jugador,escudoDeBonus){
+                escudoDeBonus.kill();
+                game.add.sprite(jugador.x-60,jugador.y-50,'escudoDeNave');
+            }
+            
+            //Funcion para generar puntos de oro extra
+            function generoPuntoOro(){
+                puntosOro= puntosO.getFirstExists(false);
+                if(puntosOro){
+                     var randomX = game.rnd.integerInRange(0, 800);
+                    puntosOro.reset(randomX,0);
+                    puntosOro.body.velocity.y=+200;
+                }
+            }
+            
+            function ganoPuntos(jugador,puntosOro){
+                puntosOro.kill();
+                sonidoMoneda.play();
+                puntos += 10;
+                puntajeTexto.text = puntajeString + puntos;
+            }
 
             function restart() {
                 //  Se reinicia y comienza el nivel nuevamente
@@ -457,10 +552,6 @@ and open the template in the editor.
 
 
         </script>
-
-
-
-
 
     </body>
 </html>
