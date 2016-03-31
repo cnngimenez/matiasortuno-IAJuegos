@@ -198,6 +198,7 @@ and open the template in the editor.
 //                          
                     //Asigno los sonidos a variables para utilizarlos
                     disparoJugador = game.add.audio('disparoJugador');
+                    disparoJugador.volume = 0.5;
                     disparoAlien = game.add.audio('disparoAlien');
                     explosionAlien = game.add.audio('explosionAlien');
                     music = game.add.audio('musicaDeepSpace');
@@ -413,8 +414,14 @@ and open the template in the editor.
                             jugador.body.velocity.x = -200;
                             jugador.animations.add('volarIzquierda', [0], 2, true);
                             jugador.play('volarIzquierda');
+                            if(jugador.body.x<4){
+                                jugador.body.velocity.x=0;
+                            }
                             if (existeEscudo) {
                                 escudoDeNave.body.velocity.x = -200;
+                                if (escudoDeNave.body.x < -5) {
+                                    escudoDeNave.body.velocity.x = 0;
+                                }
                             }
                         }
                         else if (cursors.right.isDown)
@@ -422,8 +429,14 @@ and open the template in the editor.
                             jugador.body.velocity.x = 200;
                             jugador.animations.add('volarDerecha', [2], 2, true);
                             jugador.play('volarDerecha');
+                            if(jugador.body.x>760){
+                                jugador.body.velocity.x=0;
+                            }
                             if (existeEscudo) {
                                 escudoDeNave.body.velocity.x = 200;
+                                if (escudoDeNave.body.x > 738) {
+                                    escudoDeNave.body.velocity.x = 0;
+                                }
                             }
                         }
                         else {
@@ -460,8 +473,6 @@ and open the template in the editor.
                         if (botonDisparo.isDown)
                         {
                             this.disparaJugador();
-                            disparoJugador.volume = 0.5;
-                            disparoJugador.play();
                         }
                         //  Definimos el tiempo entre disparos del enemigo
                         if (game.time.now > temporizadorDisparo)
@@ -627,6 +638,7 @@ and open the template in the editor.
                     }
                 },
                 disparaJugador: function () {
+//                    disparoJugador.play();
                     //  Definimos un limite de tiempo para que no disparen constantemente
                     if (game.time.now > tiempoBala)
                     {
@@ -636,9 +648,10 @@ and open the template in the editor.
                         if (balaJugador)
                         {
                             //  Realizamos el disparo
+                            disparoJugador.play();
                             balaJugador.reset(jugador.x, jugador.y + 10);
                             balaJugador.body.velocity.y = -400;
-                            tiempoBala = game.time.now + 200;
+                            tiempoBala = game.time.now + 100;
                             balas -= 1;
                             if (balas === -1) {
                                 //Mostrar cartel de derrota!!
@@ -685,8 +698,10 @@ and open the template in the editor.
                     puntajeTexto.text = puntajeString + puntos;
                 },
                 destruirEscudo: function (balaEnemiga, escudo) {
-                    enemyBullets.callAll('kill');
-                    escudoDeNave.kill();
+                    //enemyBullets.callAll('kill');
+                    //escudoDeNave.kill();
+                    balaEnemiga.kill();
+                    escudo.kill();
                     existeEscudo = false;
                     sonidoDestruirEscudo.volume = 10;
                     sonidoDestruirEscudo.play();
@@ -762,7 +777,9 @@ and open the template in the editor.
                     band = true;
                     //Asigno los sonidos a variables para utilizarlos
                     disparoJugador = game.add.audio('disparoJugador');
+                    disparoJugador.volume = 0.5;
                     disparoAlien = game.add.audio('disparoAlien');
+                    disparoAlien.volume = 0.8;
                     explosionAlien = game.add.audio('explosionAlien');
                     music = game.add.audio('musicaDeepSpace');
                     music.volume = 0.3;
@@ -775,7 +792,9 @@ and open the template in the editor.
                     sonidoInicio.volume = 30;
                     sonidoInicio.play();
                     sonidoDestruirEscudo = game.add.audio('destruirEscudo');
+                    sonidoDestruirEscudo.volume = 10;
                     sonidoObtenerEscudo = game.add.audio('obtenerEscudo');
+                    sonidoObtenerEscudo.volume = 10;
                     fondo2 = game.add.tileSprite(0, 0, 800, 600, 'fondo2');
 
                     //  Grupo formado por las balas del jugador
@@ -905,7 +924,7 @@ and open the template in the editor.
                     var n=0;
                     for (var y = 0; y < 5; y++)
                     {
-                        for (var x = 5+y; x < 14; x++)
+                        for (var x = 5+y; x < 16; x++)
                         {
                             var alien = aliens.create((x * 36)+n, y * 40, 'invasor2');
                             alien.anchor.setTo(0.5, 0.5);
@@ -945,13 +964,19 @@ and open the template in the editor.
                             escudoDeNave.body.velocity.setTo(0, 0);
                         }
                         //Definimos el movimiento a la izquiera y derecha
-                        if (cursors.left.isDown)
+                         if (cursors.left.isDown)
                         {
                             jugador.body.velocity.x = -200;
                             jugador.animations.add('volarIzquierda', [0], 2, true);
                             jugador.play('volarIzquierda');
+                            if(jugador.body.x<4){
+                                jugador.body.velocity.x=0;
+                            }
                             if (existeEscudo) {
                                 escudoDeNave.body.velocity.x = -200;
+                                if (escudoDeNave.body.x < -5) {
+                                    escudoDeNave.body.velocity.x = 0;
+                                }
                             }
                         }
                         else if (cursors.right.isDown)
@@ -959,8 +984,14 @@ and open the template in the editor.
                             jugador.body.velocity.x = 200;
                             jugador.animations.add('volarDerecha', [2], 2, true);
                             jugador.play('volarDerecha');
+                            if(jugador.body.x>760){
+                                jugador.body.velocity.x=0;
+                            }
                             if (existeEscudo) {
                                 escudoDeNave.body.velocity.x = 200;
+                                if (escudoDeNave.body.x > 738) {
+                                    escudoDeNave.body.velocity.x = 0;
+                                }
                             }
                         }
                         else {
@@ -997,8 +1028,6 @@ and open the template in the editor.
                         if (botonDisparo.isDown)
                         {
                             this.disparaJugador();
-                            disparoJugador.volume = 0.5;
-                            disparoJugador.play();
                         }
                         //  Definimos el tiempo entre disparos del enemigo
                         if (game.time.now > temporizadorDisparo)
@@ -1137,12 +1166,11 @@ and open the template in the editor.
                         var shooter = enemigosVivos[random];
                         // El alien disparador realiza el disparo
                         balaEnemiga.reset(shooter.body.x, shooter.body.y);
-                        disparoAlien.volume = 0.8;
                         disparoAlien.play();
                         //funcion brinada por el tipo de juego arcade, en el cual un objeto se mueve hacia otro
                         game.physics.arcade.moveToObject(balaEnemiga, jugador, 380);
                         //Temporizador para realizar disparos
-                        temporizadorDisparo = game.time.now + 520;
+                        temporizadorDisparo = game.time.now + 420;
                     }
                 },
                 disparaJugador: function () {
@@ -1155,9 +1183,10 @@ and open the template in the editor.
                         if (balaJugador)
                         {
                             //  Realizamos el disparo
+                            disparoJugador.play();
                             balaJugador.reset(jugador.x, jugador.y + 10);
                             balaJugador.body.velocity.y = -400;
-                            tiempoBala = game.time.now + 200;
+                            tiempoBala = game.time.now + 100;
                             balas -= 1;
                             if (balas === -1) {
                                 //Mostrar cartel de derrota!!
@@ -1183,7 +1212,6 @@ and open the template in the editor.
                     escudoDeBonus.kill();
                     escudoDeNave = escNave.getFirstExists(false);
                     escudoDeNave.reset(jugador.x, jugador.y + 35);
-                    sonidoObtenerEscudo.volume = 10;
                     sonidoObtenerEscudo.play();
                     escudoDeNave.scale.setTo(0.6, 0.6);
                     existeEscudo = true;
@@ -1206,10 +1234,11 @@ and open the template in the editor.
                 destruirEscudo: function (balaEnemiga, escudo) {
                     //balaEnemiga.kill();
                     //enemyBullets.callAll('kill');
-                    enemyBullets.getFirstExists().kill();
-                    escudoDeNave.kill();
+                    balaEnemiga.kill();
+                    //enemyBullets.getFirstExists().kill();
+                    escudo.kill();
+                    //escudoDeNave.kill();
                     existeEscudo = false;
-                    sonidoDestruirEscudo.volume = 10;
                     sonidoDestruirEscudo.play();
                 },
                 anularBonus: function (bonus, escudo) {
@@ -1281,13 +1310,11 @@ and open the template in the editor.
                     band = true;
                     //Asigno los sonidos a variables para utilizarlos
                     disparoJugador = game.add.audio('disparoJugador');
+                    disparoJugador.volume = 0.5;
                     disparoAlien = game.add.audio('disparoAlien');
+                    disparoAlien.volume = 0.8;
                     explosionAlien = game.add.audio('explosionAlien');
-//                    music = game.add.audio('musicaDeepSpace');
-//                    music.volume = 0.3;
-//                    music.play();
                     music = game.add.audio('musicaJefe');
-//                    music.volume = 0.5;
                     music.play();
                     sonidoExplosion = game.add.audio('sonidoExplosion');
                     sonidoGranExplosion= game.add.audio('granExplosion');
@@ -1298,7 +1325,9 @@ and open the template in the editor.
                     sonidoInicio.volume = 30;
                     sonidoInicio.play();
                     sonidoDestruirEscudo = game.add.audio('destruirEscudo');
+                    sonidoDestruirEscudo.volume = 10;
                     sonidoObtenerEscudo = game.add.audio('obtenerEscudo');
+                    sonidoObtenerEscudo.volume = 10;
                     fondo3 = game.add.tileSprite(0, 0, 800, 600, 'fondo3');
 
                     //  Grupo formado por las balas del jugador
@@ -1462,13 +1491,19 @@ and open the template in the editor.
                             escudoDeNave.body.velocity.setTo(0, 0);
                         }
                         //Definimos el movimiento a la izquiera y derecha
-                        if (cursors.left.isDown)
+                         if (cursors.left.isDown)
                         {
                             jugador.body.velocity.x = -200;
                             jugador.animations.add('volarIzquierda', [0], 2, true);
                             jugador.play('volarIzquierda');
+                            if(jugador.body.x<4){
+                                jugador.body.velocity.x=0;
+                            }
                             if (existeEscudo) {
                                 escudoDeNave.body.velocity.x = -200;
+                                if (escudoDeNave.body.x < -5) {
+                                    escudoDeNave.body.velocity.x = 0;
+                                }
                             }
                         }
                         else if (cursors.right.isDown)
@@ -1476,8 +1511,14 @@ and open the template in the editor.
                             jugador.body.velocity.x = 200;
                             jugador.animations.add('volarDerecha', [2], 2, true);
                             jugador.play('volarDerecha');
+                            if(jugador.body.x>760){
+                                jugador.body.velocity.x=0;
+                            }
                             if (existeEscudo) {
                                 escudoDeNave.body.velocity.x = 200;
+                                if (escudoDeNave.body.x > 738) {
+                                    escudoDeNave.body.velocity.x = 0;
+                                }
                             }
                         }
                         else {
@@ -1514,8 +1555,6 @@ and open the template in the editor.
                         if (botonDisparo.isDown)
                         {
                             this.disparaJugador();
-                            disparoJugador.volume = 0.5;
-                            disparoJugador.play();
                         }
                         //  Definimos el tiempo entre disparos del enemigo
                         if (game.time.now > temporizadorDisparo)
@@ -1659,7 +1698,6 @@ and open the template in the editor.
                         var shooter = enemigosVivos[random];
                         // El alien disparador realiza el disparo
                         balaEnemiga.reset(shooter.body.x, shooter.body.y);
-                        disparoAlien.volume = 0.8;
                         disparoAlien.play();
                         //funcion brinada por el tipo de juego arcade, en el cual un objeto se mueve hacia otro
                         game.physics.arcade.moveToObject(balaEnemiga, jugador, 420);
@@ -1678,9 +1716,10 @@ and open the template in the editor.
                         if (balaJugador)
                         {
                             //  Realizamos el disparo
+                            disparoJugador.play();
                             balaJugador.reset(jugador.x, jugador.y + 10);
                             balaJugador.body.velocity.y = -400;
-                            tiempoBala = game.time.now + 200;
+                            tiempoBala = game.time.now + 100;
                             balas -= 1;
                             if (balas == -1) {
                                 //Mostrar cartel de derrota!!
@@ -1705,7 +1744,6 @@ and open the template in the editor.
                     escudoDeBonus.kill();
                     escudoDeNave = escNave.getFirstExists(false);
                     escudoDeNave.reset(jugador.x, jugador.y + 35);
-                    sonidoObtenerEscudo.volume = 10;
                     sonidoObtenerEscudo.play();
                     escudoDeNave.scale.setTo(0.6, 0.6);
                     existeEscudo = true;
@@ -1726,10 +1764,11 @@ and open the template in the editor.
                     puntajeTexto.text = puntajeString + puntos;
                 },
                 destruirEscudo: function (balaEnemiga, escudo) {
-                    enemyBullets.getFirstExists().kill();
-                    escudoDeNave.kill();
+//                    enemyBullets.getFirstExists().kill();
+//                    escudoDeNave.kill();
+                    balaEnemiga.kill();
+                    escudo.kill();
                     existeEscudo = false;
-                    sonidoDestruirEscudo.volume = 10;
                     sonidoDestruirEscudo.play();
                 },
                 anularBonus: function (bonus, escudo) {
