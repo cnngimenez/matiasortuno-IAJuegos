@@ -25,7 +25,7 @@ and open the template in the editor.
             var jugador;var aliens;var balasJug;var tiempoBala = 0;var cursors;
             var botonDisparo;var explosiones;var fondoEstrellas;var puntos = 0;
             var puntajeString = '';var puntajeTexto;var vidas;var balaEnemiga;
-            var temporizadorDisparo = 0;var enemigosVivos = [];var balas = 50;
+            var temporizadorDisparo = 0;var enemigosVivos = [];var balas = 49;
             var cantBalasString;var balasRestantesTexto;var puntosO;
             var tempo = 100;var tempoEsc = 500;var bonusEsc;var escNave;
             var image;var band = true;var escudo; var existeEscudo = false;
@@ -36,15 +36,15 @@ and open the template in the editor.
             var content = [
                 "Órbita de Neptuno, Vía Láctea.                                    Año 2987 ",
                 "",
-                "Nave confederada argentina, Bítacora del capitán García.                   ",
+                "Nave confederada argentina, Bítacora del capitán García.",
                 "",
                 "Mensaje diario de control y seguimiento:         12/11/2987     Hora: 20:32 hs ",
                 "Misión de reconocimiento ARG-032 a Neptuno exitosa, regresando con las muestras.",
-                "extaídas necesarias y con total normalidad.Órbita estable.                                     ",
+                "extaídas necesarias y con total normalidad.Órbita estable. ",
                 "Detección de cuerpos celestes a distancia. Próximo reporte en 24 hs.",
-                "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+                "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
                 "",
-                "- ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! -",
+                "- !!! -",
                 "Mensaje de urgencia hacia la Tierra:              12/11/2987      Hora: 23:43 hs",
                 "Finalmente una de nuestras sondas ha interceptado un mensaje procedente de otra ",
                 "galaxia! la distancia y medición de las ondas sugiere que procede de Andrómeda.",
@@ -219,7 +219,7 @@ and open the template in the editor.
                     sonidoVictoria = game.add.audio('sonidoVictoria');
                     sonidoDerrota = game.add.audio('sonidoDerrota');
                     sonidoMoneda = game.add.audio('sonidoMoneda');
-                    sonidoInicio.volume = 30;
+                    sonidoInicio.volume = 1;
                     sonidoInicio.play();
                     sonidoDestruirEscudo = game.add.audio('destruirEscudo');
                     sonidoObtenerEscudo = game.add.audio('obtenerEscudo');
@@ -306,7 +306,7 @@ and open the template in the editor.
                     this.crearAliens();
                     //Defino variable para controlar cantidad de balas restantes
                     cantBalasString = 'Balas Restantes:';
-                    balasRestantesTexto = game.add.text(70, 550, cantBalasString + balas, {font: '24px Arial', fill: '#fff'});
+                    balasRestantesTexto = game.add.text(70, 550, cantBalasString + (balas+1), {font: '24px Arial', fill: '#fff'});
                     game.add.sprite(10, 540, 'balaActual');
                     //  Definimos varible para almacenar los puntajes
                     puntajeString = 'Puntaje : ';
@@ -558,7 +558,7 @@ and open the template in the editor.
                         bmpText.text = '    Ganaste!!!\n\n Obteniendo ' + puntos + '\n\n' + ' puntos Presiona la \n\n Barra Para Avanzar \n\n     De Nivel';
                         //elimino datos
                         band = false;
-                        puntajeTexto.text = '';
+                        //puntajeTexto.text = '';
                        // game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
 
                         //ACA estoy pensando en agregar el nuevo estado para mostrar resultados..
@@ -581,7 +581,7 @@ and open the template in the editor.
                     jugador.revive();
                     existeEscudo = false;
                     bmpText.text = '';
-                    balas = 75;
+                    balas = 74;
                     balasRestantesTexto.text = cantBalasString + balas;
 //                    puntos = 0;
 //                    puntajeTexto.text = puntajeString + puntos;
@@ -677,7 +677,7 @@ and open the template in the editor.
                                 derrota=true;
                                 this.informarDerrota('2');
                             }
-                            balasRestantesTexto.text = cantBalasString + balas;
+                            balasRestantesTexto.text = cantBalasString + (balas+1);
                         }
                     }
                 },
@@ -808,7 +808,7 @@ and open the template in the editor.
                     sonidoVictoria = game.add.audio('sonidoVictoria');
                     sonidoDerrota = game.add.audio('sonidoDerrota');
                     sonidoMoneda = game.add.audio('sonidoMoneda');
-                    sonidoInicio.volume = 30;
+                    sonidoInicio.volume = 1;
                     sonidoInicio.play();
                     sonidoDestruirEscudo = game.add.audio('destruirEscudo');
                     sonidoDestruirEscudo.volume = 10;
@@ -897,7 +897,7 @@ and open the template in the editor.
                     this.crearAliens();
                     //Defino variable para controlar cantidad de balas restantes
                     cantBalasString = 'Balas Restantes:';
-                    balasRestantesTexto = game.add.text(70, 550, cantBalasString + balas, {font: '24px Arial', fill: '#fff'});
+                    balasRestantesTexto = game.add.text(70, 550, cantBalasString + (balas+1), {font: '24px Arial', fill: '#fff'});
                     game.add.sprite(10, 540, 'balaActual');
                     //  Definimos varible para almacenar los puntajes
                     puntajeString = 'Puntaje : ';
@@ -1099,7 +1099,7 @@ and open the template in the editor.
                     if (aliens.countLiving() === 0)
                     {
                         enemyBullets.callAll('kill');
-                        puntos += 1000;
+                        puntos += 2000;
                         puntajeTexto.text = puntajeString + puntos;
 
                         enemyBullets.callAll('kill', this);
@@ -1107,7 +1107,7 @@ and open the template in the editor.
                         bmpText.text = '    Ganaste!!!\n\n Acumulando ' + puntos + '\n\n' + ' puntos Presiona la \n\n Barra Para Avanzar \n\n     De Nivel';
                         //elimino datos
                         band = false;
-                        puntajeTexto.text = '';
+                        //puntajeTexto.text = '';
                         //game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
 
                         //ACA estoy pensando en agregar el nuevo estado para mostrar resultados..
@@ -1129,7 +1129,7 @@ and open the template in the editor.
                     jugador.revive();
                     existeEscudo = false;
                     bmpText.text = '';
-                    balas = 75;
+                    balas = 74;
                     balasRestantesTexto.text = cantBalasString + balas;
                     //puntos = 0;
                     //puntajeTexto.text = puntajeString + puntos;
@@ -1223,7 +1223,7 @@ and open the template in the editor.
                                 derrota=true;
                                 this.informarDerrota('2');
                             }
-                            balasRestantesTexto.text = cantBalasString + balas;
+                            balasRestantesTexto.text = cantBalasString + (balas+1);
                         }
                     }
                 },
@@ -1297,7 +1297,7 @@ and open the template in the editor.
                     bmpText.text = '';
                     balas = 75;
                     balasRestantesTexto.text = cantBalasString + balas;
-                    puntos = 0;
+                    puntos = puntos-1000;
                     puntajeTexto.text = puntajeString + puntos;
                 }
             };
@@ -1352,7 +1352,7 @@ and open the template in the editor.
                     sonidoVictoria = game.add.audio('sonidoVictoria');
                     sonidoDerrota = game.add.audio('sonidoDerrota');
                     sonidoMoneda = game.add.audio('sonidoMoneda');
-                    sonidoInicio.volume = 30;
+                    sonidoInicio.volume = 1;
                     sonidoInicio.play();
                     sonidoDestruirEscudo = game.add.audio('destruirEscudo');
                     sonidoDestruirEscudo.volume = 10;
@@ -1435,7 +1435,7 @@ and open the template in the editor.
                     this.crearAliens();
                     //Defino variable para controlar cantidad de balas restantes
                     cantBalasString = 'Balas Restantes:';
-                    balasRestantesTexto = game.add.text(70, 550, cantBalasString + balas, {font: '24px Arial', fill: '#fff'});
+                    balasRestantesTexto = game.add.text(70, 550, cantBalasString + (balas+1), {font: '24px Arial', fill: '#fff'});
                     game.add.sprite(10, 540, 'balaActual');
                     //  Definimos varible para almacenar los puntajes
                     puntajeString = 'Puntaje : ';
@@ -1491,7 +1491,7 @@ and open the template in the editor.
 
                     //Posiciono todo el grupo de aliens
                     aliens.x = 0;
-                    aliens.y = 100;
+                    aliens.y = 80;
                     
                     //Hacemos que los aliens comiencen a moverse (lo hacemos mediante el grupo entero)
                     var tween = game.add.tween(aliens).to({x: 300}, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
@@ -1651,7 +1651,7 @@ and open the template in the editor.
                     //Si no quedan aliens vivos, aumentamos los puntajes y damos el mensaje de sonidoVictoria
                     if (aliens.countLiving() == 0)
                     {
-                        puntos += 1000;
+                        puntos += 5000;
                         puntajeTexto.text = puntajeString + puntos;
 
                         enemyBullets.callAll('kill', this);
@@ -1659,7 +1659,7 @@ and open the template in the editor.
                         bmpText.text = '  Has derrotado \n\n Al Gran Jefe !!\n\n Felicitaciones!! \n\n Puntos totales: \n\n      '+puntos;
                         //elimino datos
                         band = false;
-                        puntajeTexto.text = '';
+                        //puntajeTexto.text = '';
                         game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
 
                         //ACA estoy pensando en agregar el nuevo estado para mostrar resultados..
@@ -1732,7 +1732,7 @@ and open the template in the editor.
                         // Seleccionamos aleatoriamente un alien que disparara
                         var shooter = enemigosVivos[random];
                         // El alien disparador realiza el disparo
-                        balaEnemiga.reset(shooter.body.x, shooter.body.y);
+                        balaEnemiga.reset(shooter.body.x+100, shooter.body.y+100);
                         disparoAlien.play();
                         //funcion brinada por el tipo de juego arcade, en el cual un objeto se mueve hacia otro
                         game.physics.arcade.moveToObject(balaEnemiga, jugador, 420);
@@ -1762,7 +1762,7 @@ and open the template in the editor.
                                 derrota=true;
                                 this.informarDerrota('2');
                             }
-                            balasRestantesTexto.text = cantBalasString + balas;
+                            balasRestantesTexto.text = cantBalasString + (balas+1);
                         }
                     }
                 },
@@ -1831,7 +1831,7 @@ and open the template in the editor.
                     bmpText.text = '';
                     balas = 75;
                     balasRestantesTexto.text = cantBalasString + balas;
-                    puntos = 0;
+                    puntos = puntos-500;
                     puntajeTexto.text = puntajeString + puntos;
                 }
             };
