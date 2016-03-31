@@ -34,23 +34,29 @@ and open the template in the editor.
             
             //variables para la historia:
             var content = [
-                "The sky above the port was the color of television, tuned to a dead channel.",
-                "`It's not like I'm using,' Case heard someone say, as he shouldered his way ",
-                "through the crowd around the door of the Chat. `It's like my body's developed",
-                "this massive drug deficiency.' It was a Sprawl voice and a Sprawl joke.",
+                "Órbita de Neptuno, Vía Láctea.                                    Año 2987 ",
                 "",
-                "Ratz was tending bar, his prosthetic arm jerking monotonously as he filled a tray",
-                "of glasses with draft Kirin. He saw Case and smiled, his teeth a webwork of",
-                "East European steel and brown decay. Case found a place at the bar, between the",
-                "unlikely tan on one of Lonny Zone's whores and the crisp naval uniform of a tall",
-                "African whose cheekbones were ridged with precise rows of tribal scars. `Wage was",
-                "in here early, with two joeboys,' Ratz said, shoving a draft across the bar with",
-                "his good hand. `Maybe some business with you, Case?. I'll tell you later... ",
-                "Or maybe not.. who knows",
+                "Nave confederada argentina, Bítacora del capitán García.                   ",
                 "",
+                "Mensaje diario de control y seguimiento:         12/11/2987     Hora: 20:32 hs ",
+                "Misión de reconocimiento ARG-032 a Neptuno exitosa, regresando con las muestras.",
+                "extaídas necesarias y con total normalidad.Órbita estable.                                     ",
+                "Detección de cuerpos celestes a distancia. Próximo reporte en 24 hs.",
+                "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
                 "",
+                "- ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! - ! -",
+                "Mensaje de urgencia hacia la Tierra:              12/11/2987      Hora: 23:43 hs",
+                "Finalmente una de nuestras sondas ha interceptado un mensaje procedente de otra ",
+                "galaxia! la distancia y medición de las ondas sugiere que procede de Andrómeda.",
+                "Por primera vez en nuestra historia localizamos un mensaje de contacto extraterrestre!",
                 "",
-                "From Neuromancer by William Gibson"
+                "Con ayuda de nuestro criptólogo desciframos el mensaje, en un idioma similar al sumerio", 
+                "la traducción indica que otra raza está pidiendo ayuda ante una inminente 'extinción'.",
+                "El radar percibe movimientos cercanos apróximandose, en principio parece tratarse de",
+                "una nube de asteroides, aunque es un tanto inusual en esta órbita, confirmaremos reconocimiento.",
+                "",
+                "Cambiando coordenadas espaciales hacia Andrómeda, reportando novedades en 72 horas. "
+                
             ];
 
 
@@ -114,15 +120,19 @@ and open the template in the editor.
                     game.add.tileSprite(0, 500, 800, 600, 'click');
                     tec = game.add.audio('escrituraTeclado');
                     text = game.add.text(32, 32, '', {font: "15px Arial", fill: "#19de65"});
+                    botonDisparo = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
                     this.nextLine();
                     tec.volume = 0.3;
+                    tec.loopFull(0.5);
                     tec.play();
+                    
                 },
                 nextLine: function () {
-                    game.input.onTap.addOnce(this.comenzarJ, this);
+                    botonDisparo.onDown.addOnce(this.comenzarJ, this);
                     if (lineIndex === content.length)
                     {
                         //  We're finished
+                        tec.stop();
                         return;
                     }
                     //  Split the current line on spaces, so one word per array element
@@ -539,6 +549,7 @@ and open the template in the editor.
                     //Si no quedan aliens vivos, aumentamos los puntajes y damos el mensaje de sonidoVictoria
                     if (aliens.countLiving() === 0)
                     {
+                        enemyBullets.callAll('kill');
                         puntos += 1000;
                         puntajeTexto.text = puntajeString + puntos;
 
@@ -1087,6 +1098,7 @@ and open the template in the editor.
                     //Si no quedan aliens vivos, aumentamos los puntajes y damos el mensaje de sonidoVictoria
                     if (aliens.countLiving() === 0)
                     {
+                        enemyBullets.callAll('kill');
                         puntos += 1000;
                         puntajeTexto.text = puntajeString + puntos;
 
@@ -1609,11 +1621,12 @@ and open the template in the editor.
                     //  Cuando la bala colisiona con un alien, se destruyen ambos objetos
                     balaJugador.kill();
                     if(vidasJefe===0){
+                        enemyBullets.callAll('kill');
                         sonidoGranExplosion.play();
                         var exp = explosionJefe.getFirstExists(false);
                         exp.scale.setTo(1,1);
                         exp.reset(alien.body.x+100,alien.body.y+100);
-                       exp.play('explosionJefe',10,false,true);
+                       exp.play('explosionJefe',8,false,true);
 //                       var exp2 = explosionJefe.getFirstExists(false);
 //                       exp2.scale.setTo(1,1);
 //                        exp2.reset(alien.body.x+130,alien.body.y+180);
