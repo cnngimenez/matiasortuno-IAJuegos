@@ -57,6 +57,7 @@ and open the template in the editor.
             var line = [];var wordIndex = 0; var lineIndex = 0;
             var wordDelay = 120;var lineDelay = 400;var tec;
             var nombreJugador;
+            var derrota=false;
             //localStorage.getItem("playerName");
 
 
@@ -203,7 +204,6 @@ and open the template in the editor.
                     explosionAlien = game.add.audio('explosionAlien');
                     music = game.add.audio('musicaDeepSpace');
                     music.volume = 0.3;
-                    music.play();
                     sonidoExplosion = game.add.audio('sonidoExplosion');
                     sonidoInicio = game.add.audio('sonidoInicio');
                     sonidoVictoria = game.add.audio('sonidoVictoria');
@@ -328,9 +328,10 @@ and open the template in the editor.
                     //  Con la barra espaciadora la nave podrá disparar
                     cursors = game.input.keyboard.createCursorKeys();
                     botonDisparo = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-
                     //Agregando texto capa superior
-                    bmpText = game.add.bitmapText(36, 160, 'carrier_command', '', 34);
+                    bmpText = game.add.bitmapText(36, 160, 'carrier_command', '', 32);
+                    
+                    music.play();
                 },
                 descend: function () {
                     aliens.y += 10;
@@ -543,11 +544,11 @@ and open the template in the editor.
 
                         enemyBullets.callAll('kill', this);
                         //bmpText.text = '   Ganaste!!!\n\nHaz Click Para\n\n    Ver Los \n\n    Resultados!';
-                        bmpText.text = '    Ganaste!!!\n\n Obteniendo ' + puntos + '\n\n' + ' puntos Haz Click \n\n  Para Avanzar \n\n     De Nivel';
+                        bmpText.text = '    Ganaste!!!\n\n Obteniendo ' + puntos + '\n\n' + ' puntos Presiona la \n\n Barra Para Avanzar \n\n     De Nivel';
                         //elimino datos
                         band = false;
                         puntajeTexto.text = '';
-                        game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
+                       // game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
 
                         //ACA estoy pensando en agregar el nuevo estado para mostrar resultados..
                         music.stop();
@@ -558,8 +559,10 @@ and open the template in the editor.
                         existeEscudo = false;
                         //El manejador del evento para reiniciar
 //                        game.input.onTap.addOnce(this.mostrarRes, this);
-//                        
-                        game.input.onTap.addOnce(this.siguienteNivel, this);
+                        if(band===false){
+                        botonDisparo.onDown.addOnce(this.siguienteNivel, this);  
+                        }
+                        //game.input.onTap.addOnce(this.siguienteNivel, this);
                        // this.game.state.start('jugar2');
                     }
                 },
@@ -591,24 +594,28 @@ and open the template in the editor.
                     {
                         jugador.kill();
                         enemyBullets.callAll('kill');
+                        derrota=true;
                         this.informarDerrota('1');
                     }
 
                 },
                 informarDerrota: function (num) {
                     if (num === '1') {
-                        bmpText.text = '   Perdiste..\n\n    Haz Click \n\n para Reiniciar';
+                        bmpText.text = '     Perdiste..\n\n Presiona la Barra \n\n   para Reiniciar';
                         //Manejador de evento para reiniciar juego
                     }
                     else {
-                        bmpText.text = 'Te quedaste sin \n\n      balas..\n\n    Haz Click \n\n para Reiniciar';
+                        bmpText.text = '  Te quedaste sin \n\n      balas..\n\n Presiona la Barra \n\n   para Reiniciar';
                         if (existeEscudo) {
                             existeEscudo = false;
                             escudoDeNave.kill();
                         }
                     }
                     sonidoDerrota.play();
-                    game.input.onTap.addOnce(this.restart, this);
+                    if(derrota){
+                    botonDisparo.onDown.addOnce(this.restart, this);
+                    }
+                    //game.input.onTap.addOnce(this.restart, this);
                 },
                 disparaAlien: function () {
                     //  Tomamos la primer bala existente
@@ -651,11 +658,12 @@ and open the template in the editor.
                             disparoJugador.play();
                             balaJugador.reset(jugador.x, jugador.y + 10);
                             balaJugador.body.velocity.y = -400;
-                            tiempoBala = game.time.now + 100;
+                            tiempoBala = game.time.now + 120;
                             balas -= 1;
                             if (balas === -1) {
                                 //Mostrar cartel de derrota!!
                                 jugador.kill();
+                                derrota=true;
                                 this.informarDerrota('2');
                             }
                             balasRestantesTexto.text = cantBalasString + balas;
@@ -773,6 +781,7 @@ and open the template in the editor.
                 },
                 //Creacion y asignacion de dimensiones, creacion de los elementos principales del juego
                 create: function () {
+                    derrota=false;
                     game.physics.startSystem(Phaser.Physics.ARCADE);
                     band = true;
                     //Asigno los sonidos a variables para utilizarlos
@@ -783,7 +792,6 @@ and open the template in the editor.
                     explosionAlien = game.add.audio('explosionAlien');
                     music = game.add.audio('musicaDeepSpace');
                     music.volume = 0.3;
-                    music.play();
                     sonidoExplosion = game.add.audio('sonidoExplosion');
                     sonidoInicio = game.add.audio('sonidoInicio');
                     sonidoVictoria = game.add.audio('sonidoVictoria');
@@ -912,7 +920,9 @@ and open the template in the editor.
                     botonDisparo = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
                     //Agregando texto capa superior
-                    bmpText = game.add.bitmapText(36, 160, 'carrier_command', '', 34);
+                    bmpText = game.add.bitmapText(36, 160, 'carrier_command', '', 32);
+                    
+                    music.play();
                 },
                 descend: function () {
                     aliens.y += 10;
@@ -1082,11 +1092,11 @@ and open the template in the editor.
 
                         enemyBullets.callAll('kill', this);
                         //bmpText.text = '   Ganaste!!!\n\nHaz Click Para\n\n    Ver Los \n\n    Resultados!';
-                        bmpText.text = '   Ganaste!!!\n\n Obteniendo ' + puntos + '\n\n' + 'puntos Haz Click \n\n Para Avanzar';
+                        bmpText.text = '    Ganaste!!!\n\n Acumulando ' + puntos + '\n\n' + ' puntos Presiona la \n\n Barra Para Avanzar \n\n     De Nivel';
                         //elimino datos
                         band = false;
                         puntajeTexto.text = '';
-                        game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
+                        //game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
 
                         //ACA estoy pensando en agregar el nuevo estado para mostrar resultados..
                         music.stop();
@@ -1096,11 +1106,14 @@ and open the template in the editor.
                         }
                         existeEscudo = false;
                         //El manejador del evento para siguiente nivel
-                        game.input.onTap.addOnce(this.siguienteNivelFinal, this);
+                        if(band===false){
+                        botonDisparo.onDown.addOnce(this.siguienteNivelFinal, this);  
+                        }
+                        //game.input.onTap.addOnce(this.siguienteNivelFinal, this);
                         
                     }
                 },
-                 siguienteNivelFinal: function(){
+                siguienteNivelFinal: function(){
                     jugador.revive();
                     existeEscudo = false;
                     bmpText.text = '';
@@ -1127,6 +1140,7 @@ and open the template in the editor.
                     if (vidas.countLiving() < 1)
                     {
                         jugador.kill();
+                        derrota=true;
                         enemyBullets.callAll('kill');
                         this.informarDerrota('1');
                     }
@@ -1134,18 +1148,21 @@ and open the template in the editor.
                 },
                 informarDerrota: function (num) {
                     if (num === '1') {
-                        bmpText.text = '   Perdiste..\n\n    Haz Click \n\n para Reiniciar';
+                        bmpText.text = '   Perdiste..\n\n Presiona la Barra \n\n para Reiniciar';
                         //Manejador de evento para reiniciar juego
                     }
                     else {
-                        bmpText.text = 'Te quedaste sin \n\n      balas..\n\n    Haz Click \n\n para Reiniciar';
+                        bmpText.text = '   Te quedaste sin \n\n      balas..\n\n Presiona la Barra \n\n para Reiniciar';
                         if (existeEscudo) {
                             existeEscudo = false;
                             escudoDeNave.kill();
                         }
                     }
                     sonidoDerrota.play();
-                    game.input.onTap.addOnce(this.restart, this);
+                    //game.input.onTap.addOnce(this.restart, this);
+                    if(derrota){
+                    botonDisparo.onDown.addOnce(this.restart, this);
+                    }
                 },
                 disparaAlien: function () {
                     //  Tomamos la primer bala existente
@@ -1170,7 +1187,7 @@ and open the template in the editor.
                         //funcion brinada por el tipo de juego arcade, en el cual un objeto se mueve hacia otro
                         game.physics.arcade.moveToObject(balaEnemiga, jugador, 380);
                         //Temporizador para realizar disparos
-                        temporizadorDisparo = game.time.now + 420;
+                        temporizadorDisparo = game.time.now + 400;
                     }
                 },
                 disparaJugador: function () {
@@ -1186,11 +1203,12 @@ and open the template in the editor.
                             disparoJugador.play();
                             balaJugador.reset(jugador.x, jugador.y + 10);
                             balaJugador.body.velocity.y = -400;
-                            tiempoBala = game.time.now + 100;
+                            tiempoBala = game.time.now + 120;
                             balas -= 1;
                             if (balas === -1) {
                                 //Mostrar cartel de derrota!!
                                 jugador.kill();
+                                derrota=true;
                                 this.informarDerrota('2');
                             }
                             balasRestantesTexto.text = cantBalasString + balas;
@@ -1281,7 +1299,7 @@ and open the template in the editor.
                     game.load.spritesheet('invasor3', 'assets/invasor3.png', 180, 200);
                     game.load.spritesheet('naveJugador', 'assets/player.png', 40, 40);
                     game.load.spritesheet('explosion', 'assets/explode.png', 128, 128);
-                    game.load.spritesheet('explosionJefe', 'assets/explosionJefe.png', 160,200);
+                    game.load.spritesheet('explosionJefe', 'assets/explosionJefe.png', 180,178);
                     //game.load.image('fondoEstrellas', 'assets/starfield.png');
                     game.load.image('fondo3', 'assets/fondo3.png');
                     game.load.image('balaActual', 'assets/balas.png');
@@ -1308,6 +1326,7 @@ and open the template in the editor.
                 create: function () {
                     game.physics.startSystem(Phaser.Physics.ARCADE);
                     band = true;
+                    derrota=false;
                     //Asigno los sonidos a variables para utilizarlos
                     disparoJugador = game.add.audio('disparoJugador');
                     disparoJugador.volume = 0.5;
@@ -1315,7 +1334,6 @@ and open the template in the editor.
                     disparoAlien.volume = 0.8;
                     explosionAlien = game.add.audio('explosionAlien');
                     music = game.add.audio('musicaJefe');
-                    music.play();
                     sonidoExplosion = game.add.audio('sonidoExplosion');
                     sonidoGranExplosion= game.add.audio('granExplosion');
                     sonidoInicio = game.add.audio('sonidoInicio');
@@ -1445,9 +1463,10 @@ and open the template in the editor.
 
                     //Agregando texto capa superior
                     bmpText = game.add.bitmapText(36, 160, 'carrier_command', '', 34);
+                    music.play();
                 },
                 descend: function () {
-                    aliens.y += 10;
+                    aliens.y += 100;
                 },
                 //Funcion con la cual crearemos las naves enemigas
                 crearAliens: function () {
@@ -1459,11 +1478,11 @@ and open the template in the editor.
                             alien.body.moves = false;
 
                     //Posiciono todo el grupo de aliens
-                    aliens.x = 100;
+                    aliens.x = 0;
                     aliens.y = 100;
                     
                     //Hacemos que los aliens comiencen a moverse (lo hacemos mediante el grupo entero)
-                    var tween = game.add.tween(aliens).to({x: 200}, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+                    var tween = game.add.tween(aliens).to({x: 300}, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
                     //  Enemigos suben/bajan
                     tween.onLoop.add(this.descend, this);
 
@@ -1624,13 +1643,14 @@ and open the template in the editor.
 
                         enemyBullets.callAll('kill', this);
                         //bmpText.text = '   Ganaste!!!\n\nHaz Click Para\n\n    Ver Los \n\n    Resultados!';
-                        bmpText.text = '  Has derrotado \n\n Al Gran Jefe !!\n\n Felicitaciones!! \n\n Puntos totales: \n\n       '+puntos;
+                        bmpText.text = '  Has derrotado \n\n Al Gran Jefe !!\n\n Felicitaciones!! \n\n Puntos totales: \n\n      '+puntos;
                         //elimino datos
                         band = false;
                         puntajeTexto.text = '';
                         game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
 
                         //ACA estoy pensando en agregar el nuevo estado para mostrar resultados..
+                        music.stop();
                         sonidoVictoria.play();
                         if(existeEscudo){
                         escudoDeNave.kill();
@@ -1640,7 +1660,6 @@ and open the template in the editor.
                         //El manejador del evento para reiniciar
 //                        game.input.onTap.addOnce(this.mostrarRes, this);
                         //game.input.onTap.addOnce(this.restart, this);
-                        
                     }
                 },
                 alienMePega: function (jugador, balaJugador) {
@@ -1660,6 +1679,7 @@ and open the template in the editor.
                     if (vidas.countLiving() < 1)
                     {
                         jugador.kill();
+                        derrota=true;
                         enemyBullets.callAll('kill');
                         this.informarDerrota('1');
                     }
@@ -1667,18 +1687,20 @@ and open the template in the editor.
                 },
                 informarDerrota: function (num) {
                     if (num === '1') {
-                        bmpText.text = '   Perdiste..\n\n    Haz Click \n\n para Reiniciar';
+                        bmpText.text = '      Perdiste..\n\n Presiona la Barra \n\n   para Reiniciar';
                         //Manejador de evento para reiniciar juego
                     }
                     else {
-                        bmpText.text = 'Te quedaste sin \n\n      balas..\n\n    Haz Click \n\n para Reiniciar';
+                        bmpText.text = 'Te quedaste sin \n\n     balas..\n\n Presiona la Barra \n\n para Reiniciar';
                         if (existeEscudo) {
                             existeEscudo = false;
                             escudoDeNave.kill();
                         }
                     }
                     sonidoDerrota.play();
-                    game.input.onTap.addOnce(this.restart, this);
+                    if(derrota){
+                    botonDisparo.onDown.addOnce(this.restart, this);
+                    }
                 },
                 disparaAlien: function () {
                     //  Tomamos la primer bala existente
@@ -1703,7 +1725,7 @@ and open the template in the editor.
                         game.physics.arcade.moveToObject(balaEnemiga, jugador, 420);
                         
                         //Temporizador para realizar disparos
-                        temporizadorDisparo = game.time.now + 480;
+                        temporizadorDisparo = game.time.now + 385;
                     }
                 },
                 disparaJugador: function () {
@@ -1719,11 +1741,12 @@ and open the template in the editor.
                             disparoJugador.play();
                             balaJugador.reset(jugador.x, jugador.y + 10);
                             balaJugador.body.velocity.y = -400;
-                            tiempoBala = game.time.now + 100;
+                            tiempoBala = game.time.now + 120;
                             balas -= 1;
                             if (balas == -1) {
                                 //Mostrar cartel de derrota!!
                                 jugador.kill();
+                                derrota=true;
                                 this.informarDerrota('2');
                             }
                             balasRestantesTexto.text = cantBalasString + balas;
