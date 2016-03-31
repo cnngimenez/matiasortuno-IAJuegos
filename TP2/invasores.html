@@ -61,7 +61,7 @@ and open the template in the editor.
 
 
             var line = [];var wordIndex = 0; var lineIndex = 0;
-            var wordDelay = 120;var lineDelay = 400;var tec;
+            var wordDelay = 120;var lineDelay = 400;var tec; var musicDaft;
             var nombreJugador;
             var derrota=false;
             //localStorage.getItem("playerName");
@@ -219,9 +219,10 @@ and open the template in the editor.
                     sonidoVictoria = game.add.audio('sonidoVictoria');
                     sonidoDerrota = game.add.audio('sonidoDerrota');
                     sonidoMoneda = game.add.audio('sonidoMoneda');
-                    sonidoInicio.volume = 1;
+                    sonidoInicio.volume = 0.5;
                     sonidoInicio.play();
                     sonidoDestruirEscudo = game.add.audio('destruirEscudo');
+                    sonidoDestruirEscudo.volume = 0.8;
                     sonidoObtenerEscudo = game.add.audio('obtenerEscudo');
                     fondoEstrellas = game.add.tileSprite(0, 0, 800, 600, 'fondoEstrellas');
 
@@ -722,7 +723,6 @@ and open the template in the editor.
                     balaEnemiga.kill();
                     escudo.kill();
                     existeEscudo = false;
-                    sonidoDestruirEscudo.volume = 10;
                     sonidoDestruirEscudo.play();
                 },
                 anularBonus: function (bonus, escudo) {
@@ -808,10 +808,10 @@ and open the template in the editor.
                     sonidoVictoria = game.add.audio('sonidoVictoria');
                     sonidoDerrota = game.add.audio('sonidoDerrota');
                     sonidoMoneda = game.add.audio('sonidoMoneda');
-                    sonidoInicio.volume = 1;
+                    sonidoInicio.volume = 0.5;
                     sonidoInicio.play();
                     sonidoDestruirEscudo = game.add.audio('destruirEscudo');
-                    sonidoDestruirEscudo.volume = 10;
+                    sonidoDestruirEscudo.volume = 0.8;
                     sonidoObtenerEscudo = game.add.audio('obtenerEscudo');
                     sonidoObtenerEscudo.volume = 10;
                     fondo2 = game.add.tileSprite(0, 0, 800, 600, 'fondo2');
@@ -1323,6 +1323,7 @@ and open the template in the editor.
                     game.load.audio('explosionAlien', ['assets/expAlien.mp3'], 'assets/expAlien.ogg');
                     //game.load.audio('musicaDeepSpace', ['assets/deepSpace.mp3'], 'assets/deepSpace.ogg');
                     game.load.audio('musicaJefe', ['assets/musicaJefe.mp3'], 'assets/musicaJefe.ogg');
+                    game.load.audio('musicDaft',['assets/musicDaft.mp3'], 'assets/musicDaft.ogg');
                     game.load.audio('sonidoExplosion', ['assets/explo.mp3'], 'assets/explo.ogg');
                     game.load.audio('granExplosion', ['assets/granExplosion.mp3'], 'assets/granExplosion.ogg');
                     game.load.audio('sonidoInicio', ['assets/inicio.mp3'], 'assets/inicio.ogg');
@@ -1346,16 +1347,18 @@ and open the template in the editor.
                     disparoAlien.volume = 0.8;
                     explosionAlien = game.add.audio('explosionAlien');
                     music = game.add.audio('musicaJefe');
+                    musicDaft=game.add.audio('musicDaft');
+                    musicDaft.loopFull(0.5);
                     sonidoExplosion = game.add.audio('sonidoExplosion');
                     sonidoGranExplosion= game.add.audio('granExplosion');
                     sonidoInicio = game.add.audio('sonidoInicio');
                     sonidoVictoria = game.add.audio('sonidoVictoria');
                     sonidoDerrota = game.add.audio('sonidoDerrota');
                     sonidoMoneda = game.add.audio('sonidoMoneda');
-                    sonidoInicio.volume = 1;
+                    sonidoInicio.volume = 0.5;
                     sonidoInicio.play();
                     sonidoDestruirEscudo = game.add.audio('destruirEscudo');
-                    sonidoDestruirEscudo.volume = 10;
+                    sonidoDestruirEscudo.volume = 0.8;
                     sonidoObtenerEscudo = game.add.audio('obtenerEscudo');
                     sonidoObtenerEscudo.volume = 10;
                     fondo3 = game.add.tileSprite(0, 0, 800, 600, 'fondo3');
@@ -1621,6 +1624,7 @@ and open the template in the editor.
                     //  Cuando la bala colisiona con un alien, se destruyen ambos objetos
                     balaJugador.kill();
                     if(vidasJefe===0){
+                        music.stop();
                         enemyBullets.callAll('kill');
                         sonidoGranExplosion.play();
                         var exp = explosionJefe.getFirstExists(false);
@@ -1670,6 +1674,7 @@ and open the template in the editor.
                         }
                         existeEscudo = false;
                         jugador.kill();
+                        musicDaft.play();
                         //El manejador del evento para reiniciar
 //                        game.input.onTap.addOnce(this.mostrarRes, this);
                         //game.input.onTap.addOnce(this.restart, this);
