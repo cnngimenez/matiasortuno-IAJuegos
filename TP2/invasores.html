@@ -86,7 +86,7 @@ and open the template in the editor.
                     image.body.velocity.x = +30;
                     game.add.sprite(60, 400, 'teclas');
                     bmpText = game.add.bitmapText(10, 200, 'carrier_command', '', 18);
-                    //bmpText.tint=0xF4FA58;
+                    bmpText.tint=0xA9F5D0;
                     bmpText.text = '       Bienvenido Aventurera/o!\n\n             Haz Click \n\n           para Comenzar \n\n         La EPICA BATALLA!';
                     
         
@@ -137,7 +137,8 @@ and open the template in the editor.
                     game.add.tileSprite(0, 0, 800, 600, 'imagenEscritura');
                     game.add.tileSprite(0, 510, 800, 600, 'click');
                     tec = game.add.audio('escrituraTeclado');
-                    text = game.add.text(32, 32, '', {font: "15px Arial", fill: "#19de65"});
+                    text = game.add.text(32, 32, '', {font: "15px Arial", fill: "#58FA58"});
+                    //text.tint=0xA9F5D0;
                     botonDisparo = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
                     this.nextLine();
                     tec.volume = 0.1;
@@ -574,7 +575,8 @@ and open the template in the editor.
 
                         enemyBullets.callAll('kill', this);
                         //bmpText.text = '   Ganaste!!!\n\nHaz Click Para\n\n    Ver Los \n\n    Resultados!';
-                        bmpText.text = '    Ganaste!!!\n\n Obteniendo ' + puntos + '\n\n' + ' puntos Presiona la \n\n Barra Para Avanzar \n\n     De Nivel';
+                        bmpText.tint=0x82FA58;
+                        bmpText.text = '    Ganaste!!!\n\n Obteniendo ' + puntos + '\n\n' + ' puntos Presiona la \n\n Barra Para Avanzar \n\n    De Nivel..';
                         //elimino datos
                         band = false;
                         //puntajeTexto.text = '';
@@ -631,11 +633,13 @@ and open the template in the editor.
                 },
                 informarDerrota: function (num) {
                     if (num === '1') {
-                        bmpText.text = '     Perdiste..\n\n Presiona la Barra \n\n   para Reiniciar';
+                        bmpText.tint=0xFF0000;
+                        bmpText.text = ' Te convertiste en\n\n picadillo espacial! \n\n Presiona la Barra \n\n  para Reiniciar.';
                         //Manejador de evento para reiniciar juego
                     }
                     else {
-                        bmpText.text = '  Te quedaste sin \n\n      balas..\n\n Presiona la Barra \n\n   para Reiniciar';
+                        bmpText.tint=0xF7FE2E;
+                        bmpText.text = ' Municion limitada \n\npor la inflacion!Te \n\nquedaste sin balas.. \n\n Presiona la Barra \n\n  para Reiniciar.';
                         if (existeEscudo) {
                             existeEscudo = false;
                             escudoDeNave.kill();
@@ -1119,7 +1123,8 @@ and open the template in the editor.
 
                         enemyBullets.callAll('kill', this);
                         //bmpText.text = '   Ganaste!!!\n\nHaz Click Para\n\n    Ver Los \n\n    Resultados!';
-                        bmpText.text = '    Ganaste!!!\n\n Acumulando ' + puntos + '\n\n' + ' puntos Presiona la \n\n Barra Para Avanzar \n\n     De Nivel';
+                        bmpText.tint=0x82FA58;
+                        bmpText.text = '    Ganaste!!!\n\n Acumulando ' + puntos + '\n\n' + 'puntos. Presiona la \n\nBarra Para Avanzar \n\n    De Nivel..';
                         //elimino datos
                         band = false;
                         //puntajeTexto.text = '';
@@ -1174,12 +1179,14 @@ and open the template in the editor.
 
                 },
                 informarDerrota: function (num) {
-                    if (num === '1') {
-                        bmpText.text = '   Perdiste..\n\n Presiona la Barra \n\n para Reiniciar';
-                        //Manejador de evento para reiniciar juego
-                    }
+                if (num === '1') {
+                                    bmpText.tint=0xF2F2F2;
+                                    bmpText.text = '     La famosa \n\n "chatarra espacial"... \n\n Presiona la Barra \n\n  para Reiniciar.';
+                                    //Manejador de evento para reiniciar juego
+                                  }
                     else {
-                        bmpText.text = '   Te quedaste sin \n\n      balas..\n\n Presiona la Barra \n\n para Reiniciar';
+                            bmpText.tint=0xF7FE2E;
+                            bmpText.text = '   Se te pego la \n\nmano al gatillo? Te \n\nquedaste sin balas.. \n\n Presiona la Barra \n\n  para Reiniciar.';
                         if (existeEscudo) {
                             existeEscudo = false;
                             escudoDeNave.kill();
@@ -1313,6 +1320,9 @@ and open the template in the editor.
                     balas = 75;
                     balasRestantesTexto.text = cantBalasString + balas;
                     puntos = puntos-1000;
+                    if(puntos <= 0){
+                        puntos =0;
+                    }
                     puntajeTexto.text = puntajeString + puntos;
                 }
             };
@@ -1676,7 +1686,8 @@ and open the template in the editor.
                         enemyBullets.callAll('kill', this);
                         
                         //bmpText.text = '   Ganaste!!!\n\nHaz Click Para\n\n    Ver Los \n\n    Resultados!';
-                        //bmpText.tint=0xF4FA58;
+                        bmpText.tint=0x82FA58;
+                       
                         bmpText.text = '  Has derrotado \n\n Al Gran Jefe !!\n\n Felicitaciones!! \n\n Puntos totales: \n\n      '+puntos;
                         //bmpText.tint=0xA9F5A9;
                         //elimino datos
@@ -1701,9 +1712,10 @@ and open the template in the editor.
                         vid.text = '';
                         
                         jugA = game.add.sprite(660, 380, 'daftMovAmarillo');
-                        
-                        jugAz = game.add.sprite(0, 380, 'daftMovAzul');
-                        jugRo = game.add.sprite(0,10,'daftMovRojo');
+                        jugAz = game.add.sprite(100, 380, 'daftMovAzul');
+                        jugAz.scale.x*=-1;
+                        jugRo = game.add.sprite(100,10,'daftMovRojo');
+                        jugRo.scale.x*=-1;
                         jugVi = game.add.sprite(660,10,'daftMovVioleta');
                         //jug.scale.setTo(0.5,0.5);
                         game.physics.arcade.enable(jugA);
@@ -1758,12 +1770,14 @@ and open the template in the editor.
 
                 },
                 informarDerrota: function (num) {
-                    if (num === '1') {
-                        bmpText.text = '      Perdiste..\n\n Presiona la Barra \n\n   para Reiniciar';
+                     if (num === '1') {
+                        bmpText.tint=0xFF0000;
+                        bmpText.text = '   Por algo es el\n\n jeeeeeefe! no? \n\n Presiona la Barra \n\n  para Reiniciar.';
                         //Manejador de evento para reiniciar juego
                     }
                     else {
-                        bmpText.text = 'Te quedaste sin \n\n     balas..\n\n Presiona la Barra \n\n para Reiniciar';
+                        bmpText.tint=0xF7FE2E;
+                        bmpText.text = ' No son misiles \n\n autodirigidos!\n\n(por ahora..) Te\n\nquedaste sin balas.. \n\n Presiona la Barra \n\n  para Reiniciar.';
                         if (existeEscudo) {
                             existeEscudo = false;
                             escudoDeNave.kill();
@@ -1891,6 +1905,9 @@ and open the template in the editor.
                     balas = 75;
                     balasRestantesTexto.text = cantBalasString + balas;
                     puntos = puntos-500;
+                    if(puntos <= 0){
+                        puntos =0;
+                    }
                     puntajeTexto.text = puntajeString + puntos;
                 }
             };
