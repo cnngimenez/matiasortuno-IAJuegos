@@ -34,28 +34,29 @@ and open the template in the editor.
             
             //variables para la historia:
             var content = [
-                "Órbita de Neptuno, Vía Láctea.                                    Año 2987 ",
+                "Órbita de Neptuno, Vía Láctea.                                    Año 3987.",
                 "",
-                "Nave confederada argentina, Bítacora del capitán García.",
+                "Nave confederada argentina, Bítacora del capitán García. Reportes:",
                 "",
-                "Mensaje diario de control y seguimiento:         12/11/2987     Hora: 20:32 hs ",
+                "- - - - - Mensaje diario de control y seguimiento:   12/11/3987   Hora: 20:47 hs - - - - -",
                 "Misión de reconocimiento ARG-032 a Neptuno exitosa, regresando con las muestras.",
-                "extaídas necesarias y con total normalidad.Órbita estable. ",
-                "Detección de cuerpos celestes a distancia. Próximo reporte en 24 hs.",
-                "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+                "extaídas necesarias y con total normalidad. Órbita estable, turbulencia nula. ",
+                "Detección de cuerpos rocosos/metálicos a distancia. Próximo reporte en 24 hs.",
+                "Fin comunicación.",
+                "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
                 "",
-                "- !!! -",
-                "Mensaje de urgencia hacia la Tierra:              12/11/2987      Hora: 23:43 hs",
-                "Finalmente una de nuestras sondas ha interceptado un mensaje procedente de otra ",
-                "galaxia! la distancia y medición de las ondas sugiere que procede de Andrómeda.",
-                "Por primera vez en nuestra historia localizamos un mensaje de contacto extraterrestre!",
-                "",
-                "Con ayuda de nuestro criptólogo desciframos el mensaje, en un idioma similar al sumerio", 
+                "¡ - - - - Mensaje de urgencia hacia la Tierra:    13/11/3987      Hora: 17:56 hs - - - - !",
+                "¡Finalmente una de nuestras sondas ha interceptado un mensaje procedente de otra ",
+                "galaxia! la distancia y medición de las ondas sugiere que procede de Circinus .",
+                "¡Por primera vez en nuestra historia localizamos un mensaje de contacto extraterrestre!.",
+                "Fin comunicación.",
+                "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+                ":-Con ayuda de nuestro criptólogo desciframos el mensaje, en un idioma similar al sumerio", 
                 "la traducción indica que otra raza está pidiendo ayuda ante una inminente 'extinción'.",
                 "El radar percibe movimientos cercanos apróximandose, en principio parece tratarse de",
                 "una nube de asteroides, aunque es un tanto inusual en esta órbita, confirmaremos reconocimiento.",
-                "",
-                "Cambiando coordenadas espaciales hacia Andrómeda, reportando novedades en 72 horas. "
+                "Cambiando coordenadas espaciales hacia Circinus , reportando novedades en las próximas 72 horas.  ",
+                "Preparando cañones láser para traspasar la nube... motores en máxima potencia! "
                 
             ];
 
@@ -77,6 +78,8 @@ and open the template in the editor.
                 },
                 create: function () {
                     music = game.add.audio('musicaPrincipal');
+                    //music.volume=1;
+                    music.volume=3;
                     music.play();
                     game.add.tileSprite(0, 0, 800, 600, 'fondoEstrellas');
                     image = game.add.sprite(0, 0, 'inv');
@@ -117,12 +120,12 @@ and open the template in the editor.
                 create: function () {
                     game.add.tileSprite(0, 0, 800, 600, 'fondoEstrellas');
                     game.add.tileSprite(0, 0, 800, 600, 'imagenEscritura');
-                    game.add.tileSprite(0, 500, 800, 600, 'click');
+                    game.add.tileSprite(0, 510, 800, 600, 'click');
                     tec = game.add.audio('escrituraTeclado');
                     text = game.add.text(32, 32, '', {font: "15px Arial", fill: "#19de65"});
                     botonDisparo = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
                     this.nextLine();
-                    tec.volume = 0.3;
+                    tec.volume = 0.1;
                     tec.loopFull(0.5);
                     tec.play();
                     
@@ -209,11 +212,11 @@ and open the template in the editor.
 //                          
                     //Asigno los sonidos a variables para utilizarlos
                     disparoJugador = game.add.audio('disparoJugador');
-                    disparoJugador.volume = 0.5;
+                    disparoJugador.volume = 0.3;
                     disparoAlien = game.add.audio('disparoAlien');
                     explosionAlien = game.add.audio('explosionAlien');
                     music = game.add.audio('musicaDeepSpace');
-                    music.volume = 0.3;
+                    music.volume = 0.8;
                     sonidoExplosion = game.add.audio('sonidoExplosion');
                     sonidoInicio = game.add.audio('sonidoInicio');
                     sonidoVictoria = game.add.audio('sonidoVictoria');
@@ -757,11 +760,7 @@ and open the template in the editor.
             };
             
             
-            
-            
-            
-            
-            
+    
                     
             var estadoJugando2 = {
                 //Precarga: cargo todos los recursos a utilizar en el juego
@@ -797,12 +796,12 @@ and open the template in the editor.
                     band = true;
                     //Asigno los sonidos a variables para utilizarlos
                     disparoJugador = game.add.audio('disparoJugador');
-                    disparoJugador.volume = 0.5;
+                    disparoJugador.volume = 0.3;
                     disparoAlien = game.add.audio('disparoAlien');
                     disparoAlien.volume = 0.8;
                     explosionAlien = game.add.audio('explosionAlien');
                     music = game.add.audio('musicaDeepSpace');
-                    music.volume = 0.3;
+                    music.volume = 0.8;
                     sonidoExplosion = game.add.audio('sonidoExplosion');
                     sonidoInicio = game.add.audio('sonidoInicio');
                     sonidoVictoria = game.add.audio('sonidoVictoria');
@@ -947,6 +946,7 @@ and open the template in the editor.
                     {
                         for (var x = 5+y; x < 16; x++)
                         {
+                            //crate parametros: posicion donde se pondra, y sprite (se añade automaticamente al juego)
                             var alien = aliens.create((x * 36)+n, y * 40, 'invasor2');
                             alien.anchor.setTo(0.5, 0.5);
                             alien.animations.add('fly', [0, 1, 2, 3], 10, true);
@@ -1342,13 +1342,14 @@ and open the template in the editor.
                     derrota=false;
                     //Asigno los sonidos a variables para utilizarlos
                     disparoJugador = game.add.audio('disparoJugador');
-                    disparoJugador.volume = 0.5;
+                    disparoJugador.volume = 0.3;
                     disparoAlien = game.add.audio('disparoAlien');
                     disparoAlien.volume = 0.8;
                     explosionAlien = game.add.audio('explosionAlien');
                     music = game.add.audio('musicaJefe');
                     musicDaft=game.add.audio('musicDaft');
-                    musicDaft.loopFull(0.5);
+                   // musicDaft.volume=30;
+                    //musicDaft.loopFull(5);
                     sonidoExplosion = game.add.audio('sonidoExplosion');
                     sonidoGranExplosion= game.add.audio('granExplosion');
                     sonidoInicio = game.add.audio('sonidoInicio');
@@ -1624,7 +1625,8 @@ and open the template in the editor.
                     //  Cuando la bala colisiona con un alien, se destruyen ambos objetos
                     balaJugador.kill();
                     if(vidasJefe===0){
-                        music.stop();
+                        //music.stop();
+                        
                         enemyBullets.callAll('kill');
                         sonidoGranExplosion.play();
                         var exp = explosionJefe.getFirstExists(false);
@@ -1669,12 +1671,13 @@ and open the template in the editor.
                         //ACA estoy pensando en agregar el nuevo estado para mostrar resultados..
                         music.stop();
                         sonidoVictoria.play();
+                        musicDaft.loopFull(4);
                         if(existeEscudo){
                         escudoDeNave.kill();
                         }
                         existeEscudo = false;
                         jugador.kill();
-                        musicDaft.play();
+                        
                         //El manejador del evento para reiniciar
 //                        game.input.onTap.addOnce(this.mostrarRes, this);
                         //game.input.onTap.addOnce(this.restart, this);
