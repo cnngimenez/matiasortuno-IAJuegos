@@ -36,35 +36,34 @@ and open the template in the editor.
             var content = [
                 "Órbita de Neptuno, Vía Láctea.                                    Año 3987.",
                 "",
-                "Nave confederada argentina, Bítacora del capitán García. Reportes:",
+                "Nave confederada argentina, Bitácora del capitán García. Reportes:",
                 "",
                 "- - - - - Mensaje diario de control y seguimiento:   12/11/3987   Hora: 20:47 hs - - - - -",
-                "Misión de reconocimiento ARG-032 a Neptuno exitosa, regresando con las muestras.",
-                "extaídas necesarias y con total normalidad. Órbita estable, turbulencia nula. ",
+                "Misión de reconocimiento ARG-032 a Neptuno exitosa, regresando con las muestras",
+                "extaídas necesarias, y con total normalidad. Órbita estable, turbulencia nula. ",
                 "Detección de cuerpos rocosos/metálicos a distancia. Próximo reporte en 24 hs.",
                 "Fin comunicación.",
                 "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
                 "",
                 "¡ - - - - Mensaje de urgencia hacia la Tierra:    13/11/3987      Hora: 17:56 hs - - - - !",
                 "¡Finalmente una de nuestras sondas ha interceptado un mensaje procedente de otra ",
-                "galaxia! la distancia y medición de las ondas sugiere que procede de Circinus .",
+                "galaxia! la distancia en la medición de las ondas sugiere que procede de Circinus .",
                 "¡Por primera vez en nuestra historia localizamos un mensaje de contacto extraterrestre!.",
                 "Fin comunicación.",
                 "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
-                ":-Con ayuda de nuestro criptólogo desciframos el mensaje, en un idioma similar al sumerio", 
-                "la traducción indica que otra raza está pidiendo ayuda ante una inminente 'extinción'.",
+                ":-Con ayuda de nuestro criptólogo desciframos el mensaje, en un idioma similar al antiguo", 
+                "sumerio la traducción indica que otra raza está pidiendo ayuda ante una inminente 'extinción'.",
                 "El radar percibe movimientos cercanos apróximandose, en principio parece tratarse de",
                 "una nube de asteroides, aunque es un tanto inusual en esta órbita, confirmaremos reconocimiento.",
-                "Cambiando coordenadas espaciales hacia Circinus , reportando novedades en las próximas 72 horas.  ",
-                "Preparando cañones láser para traspasar la nube... motores en máxima potencia! "
+                "-Cambiando coordenadas espaciales hacia Circinus , reportando novedades en las próximas 72 horas.  ",
+                "Preparando cañones láser para traspasar la nube... motores en máxima potencia!-"
                 
             ];
 
-
-            var line = [];var wordIndex = 0; var lineIndex = 0;
+            var line = [];var wordIndex = 0; var lineIndex = 0;var bActual;
             var wordDelay = 120;var lineDelay = 400;var tec; var musicDaft;
-            var nombreJugador;
-            var derrota=false;
+            var nombreJugador;var vid;
+            var derrota=false; 
             //localStorage.getItem("playerName");
 
 
@@ -87,7 +86,21 @@ and open the template in the editor.
                     image.body.velocity.x = +30;
                     game.add.sprite(60, 400, 'teclas');
                     bmpText = game.add.bitmapText(10, 200, 'carrier_command', '', 18);
+                    //bmpText.tint=0xF4FA58;
                     bmpText.text = '       Bienvenido Aventurera/o!\n\n             Haz Click \n\n           para Comenzar \n\n         La EPICA BATALLA!';
+                    
+        
+
+//                //  Player physics properties. Give the little guy a slight bounce.
+//                jug = game.add.sprite(115, 185, 'daftMov');
+//                //jug.scale.setTo(0.5,0.5);
+//                game.physics.arcade.enable(jug);
+////                jug.body.bounce.y = 0.2;
+////                jug.body.gravity.y = 300;
+//                jug.body.collideWorldBounds = true;
+        
+                     //jug.animations.add('baile', [0, 1, 2, 3, 4], 10, true);
+                     
                     this.comenzarJuego();
                 },
                 comenzarJuego: function () {
@@ -98,6 +111,8 @@ and open the template in the editor.
                     this.game.state.start('historia');
                 },
                 update: function () {
+                    // jug.animations.play('baile');
+//                    
                     if (image.body.x === 200) {
                         image.body.velocity.x = -30;
                     }
@@ -1312,7 +1327,7 @@ and open the template in the editor.
                     game.load.spritesheet('naveJugador', 'assets/player.png', 40, 40);
                     game.load.spritesheet('explosion', 'assets/explode.png', 128, 128);
                     game.load.spritesheet('explosionJefe', 'assets/explosionJefe.png', 180,178);
-                    //game.load.image('fondoEstrellas', 'assets/starfield.png');
+                    game.load.image('fondoEstrellas', 'assets/starfield.png');
                     game.load.image('fondo3', 'assets/fondo3.png');
                     game.load.image('balaActual', 'assets/balas.png');
                     game.load.image('puntosOro', 'assets/puntosOro.png');
@@ -1321,6 +1336,11 @@ and open the template in the editor.
                     game.load.audio('disparoJugador', ['assets/disparoPlayer.mp3'], 'assets/disparoPlayer.ogg');
                     game.load.audio('disparoAlien', ['assets/disparoAlien.mp3'], 'assets/disparoAlien.ogg');
                     game.load.audio('explosionAlien', ['assets/expAlien.mp3'], 'assets/expAlien.ogg');
+                    game.load.spritesheet('daftMovAmarillo', 'assets/daftMovAmarillo.png',125,200);
+                    game.load.spritesheet('daftMovAzul', 'assets/daftMovAzul.png',125,200);
+                    game.load.spritesheet('daftMovRojo', 'assets/daftMovRojo.png',125,200);
+                    game.load.spritesheet('daftMovVioleta', 'assets/daftMovVioleta.png',125,200);
+                    
                     //game.load.audio('musicaDeepSpace', ['assets/deepSpace.mp3'], 'assets/deepSpace.ogg');
                     game.load.audio('musicaJefe', ['assets/musicaJefe.mp3'], 'assets/musicaJefe.ogg');
                     game.load.audio('musicDaft',['assets/musicDaft.mp3'], 'assets/musicDaft.ogg');
@@ -1363,12 +1383,13 @@ and open the template in the editor.
                     sonidoObtenerEscudo = game.add.audio('obtenerEscudo');
                     sonidoObtenerEscudo.volume = 10;
                     fondo3 = game.add.tileSprite(0, 0, 800, 600, 'fondo3');
+                    
+                    
 
                     //  Grupo formado por las balas del jugador
                     balasJug = game.add.group();
                     balasJug.enableBody = true;
                     balasJug.physicsBodyType = Phaser.Physics.ARCADE;
-
                     balasJug.createMultiple(30, 'balaJugador');
                     //Definimos posicionamiento en diagonal
                     balasJug.setAll('anchor.x', 0.5);
@@ -1440,14 +1461,15 @@ and open the template in the editor.
                     //Defino variable para controlar cantidad de balas restantes
                     cantBalasString = 'Balas Restantes:';
                     balasRestantesTexto = game.add.text(70, 550, cantBalasString + (balas+1), {font: '24px Arial', fill: '#fff'});
-                    game.add.sprite(10, 540, 'balaActual');
+                    bActual = game.add.sprite(10, 540, 'balaActual');
                     //  Definimos varible para almacenar los puntajes
                     puntajeString = 'Puntaje : ';
                     puntajeTexto = this.add.text(10, 10, puntajeString + puntos, {font: '24px Arial', fill: '#fff'});
 
                     //  Definimos el grupo 'vidas' para que no tenga únicamente una
                     vidas = game.add.group();
-                    game.add.text(game.world.width - 120, 10, 'Vidas : ', {font: '26px Arial', fill: '#fff'});
+                    vid = game.add.text(game.world.width - 120, 10, 'Vidas : ', {font: '26px Arial', fill: '#fff'});
+                    
 
                     //Creamos el gráfico para indicar cuántas vidas tenemos disponible
                     for (var i = 0; i < 3; i++)
@@ -1468,7 +1490,7 @@ and open the template in the editor.
                     
                     explosionJefe= game.add.group();
                     explosionJefe.createMultiple(20,'explosionJefe');
-                     explosionJefe.forEach(this.explotarJefe, this);
+                    explosionJefe.forEach(this.explotarJefe, this);
                     //explosionJefe.animation.add('explotar',[0,1,2,3,4,5,6,7,8,9,10,11],10,true);
 
                     //  Añadimos los cursores para poder jugar
@@ -1633,20 +1655,11 @@ and open the template in the editor.
                         exp.scale.setTo(1,1);
                         exp.reset(alien.body.x+100,alien.body.y+100);
                        exp.play('explosionJefe',8,false,true);
-//                       var exp2 = explosionJefe.getFirstExists(false);
-//                       exp2.scale.setTo(1,1);
-//                        exp2.reset(alien.body.x+130,alien.body.y+180);
-//                       exp2.play('explosionJefe',10,false,true);
-//                    explosionJefe.play();
                     alien.kill();
                     }
                     else{
                         vidasJefe--;
                     }
-                    
-                    //  Incrementamos el puntaje por haber matado una nave enemiga
-//                    puntos += 1000;
-//                    puntajeTexto.text = puntajeString + puntos;
 
                     //  Añadimos la explosion causada por el impacto sobre la posicion del alien
                     var explosion = explosiones.getFirstExists(false);
@@ -1659,10 +1672,13 @@ and open the template in the editor.
                     {
                         puntos += 5000;
                         puntajeTexto.text = puntajeString + puntos;
-
+                        
                         enemyBullets.callAll('kill', this);
+                        
                         //bmpText.text = '   Ganaste!!!\n\nHaz Click Para\n\n    Ver Los \n\n    Resultados!';
+                        //bmpText.tint=0xF4FA58;
                         bmpText.text = '  Has derrotado \n\n Al Gran Jefe !!\n\n Felicitaciones!! \n\n Puntos totales: \n\n      '+puntos;
+                        //bmpText.tint=0xA9F5A9;
                         //elimino datos
                         band = false;
                         //puntajeTexto.text = '';
@@ -1677,6 +1693,41 @@ and open the template in the editor.
                         }
                         existeEscudo = false;
                         jugador.kill();
+                        vidas.callAll('kill');
+                        vidas.callAll('kil');
+                        puntajeTexto.text='';
+                        balasRestantesTexto.text = '';
+                        bActual.visible = false;
+                        vid.text = '';
+                        
+                        jugA = game.add.sprite(660, 380, 'daftMovAmarillo');
+                        
+                        jugAz = game.add.sprite(0, 380, 'daftMovAzul');
+                        jugRo = game.add.sprite(0,10,'daftMovRojo');
+                        jugVi = game.add.sprite(660,10,'daftMovVioleta');
+                        //jug.scale.setTo(0.5,0.5);
+                        game.physics.arcade.enable(jugA);
+                        game.physics.arcade.enable(jugAz);
+                        game.physics.arcade.enable(jugRo);
+                        game.physics.arcade.enable(jugVi);
+    //                  jug.body.bounce.y = 0.2;
+    //                  jug.body.gravity.y = 300;
+                        jugA.body.collideWorldBounds = true;
+                        jugA.animations.add('baileA', [0, 1, 2, 3, 4, 5, 6, 7], 16, true);
+                        jugAz.body.collideWorldBounds = true;
+                        jugAz.animations.add('baileAz', [0, 1, 2, 3, 4, 5, 6, 7], 16, true);
+                        jugRo.body.collideWorldBounds = true;
+                        jugRo.animations.add('baileRo', [0, 1, 2, 3, 4, 5, 6, 7], 16, true);
+                        jugVi.body.collideWorldBounds = true;
+                        jugVi.animations.add('baileVi', [0, 1, 2, 3, 4, 5, 6, 7], 16, true);
+                        
+                        
+                        for(i=0;i<1;i++){
+                        jugA.animations.play('baileA');
+                        jugAz.animations.play('baileAz');
+                        jugRo.animations.play('baileRo');
+                        jugVi.animations.play('baileVi');
+                    }
                         
                         //El manejador del evento para reiniciar
 //                        game.input.onTap.addOnce(this.mostrarRes, this);
