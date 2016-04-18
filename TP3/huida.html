@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<html>
+    <head>
+        <title>Steering Behavior: FLEEING</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="estilotp3.css">
+    </head>
+
+    <body>
+        <div id="titulo">Fleeing/Runnaway/Huida!"</div>
+        <script type="text/javascript" src="phaser.min.js"></script>
+        <script type="text/javascript">
+
+            var policia;var ladron;var fondoPolicia; var movX; var movY;var gorroLadron;var gorroPolicia;var band=false;var sirena;
+            
+
+            var estadoJugando = {
+                //Precarga: cargo todos los recursos a utilizar en el juego
+                preload: function () {
+                    game.load.spritesheet('ladron', 'assets/ladron.png', 40, 40);
+                    game.load.spritesheet('policia', 'assets/policia.png', 40, 40);
+                    game.load.image('fondoPolicia', 'assets/fondoPolicia.jpg');
+                    game.load.spritesheet('alarma', 'assets/alarm.png', 40, 40);
+                    game.load.spritesheet('gorro', 'assets/gorro.png', 40, 40);
+                    game.load.audio('atrapar', ['assets/atrapar.mp3'], 'assets/atrapar.ogg');
+//                    game.load.spritesheet('ladron', 'assets/ladron1.png', 300, 300);
+//                    game.load.spritesheet('policia', 'assets/policia1.png', 300, 300);
+//                    game.load.image('fondoPolicia', 'assets/fondoPolicia1.jpg');
+                },
+                
+                //Creacion y asignacion de dimensiones, creacion de los elementos principales del juego
+                create: function () {
+                    game.physics.startSystem(Phaser.Physics.ARCADE);
+
+                    sirena = game.add.audio('atrapar');
+                    fondoEstrellas = game.add.sprite(0, 0, 'fondoPolicia');
+
+                    var x=game.rnd.integerInRange(0,800);
+                    var y=game.rnd.integerInRange(0,600);
+//                    console.log(x);
+
+                    policia = game.add.sprite(x, y, 'policia');
+                    policia.anchor.setTo(0.5, 0.5);
+                    game.physics.enable(policia, Phaser.Physics.ARCADE);
+//                    policia.scale.setTo(0.3,0.3);
+//                    policia.body.collideWorldBounds = true;
+                    policia.checkWorldBounds = true;
+                    policia.outOfBoundsKill = true;
+                    
+                    var x=game.rnd.integerInRange(0,800);
+                    var y=game.rnd.integerInRange(0,600);
+                    
+                    ladron = game.add.sprite(x, y, 'ladron');
+                    ladron.anchor.setTo(0.5,0.5);
+                    game.physics.enable(ladron, Phaser.Physics.ARCADE);
+//                    ladron.scale.setTo(0.3,0.3);
+//                    ladron.body.collideWorldBounds = true;
+                    ladron.checkWorldBounds = true;
+                    ladron.outOfBoundsKill = true;
+                    
+                    
+//                    game.physics.arcade.moveToObject(policia, ladron, 100);
+                        
+                   movX=game.rnd.integerInRange(-30,30);
+                   movY=game.rnd.integerInRange(-30,30);
+                 
+                },
+                
+                update: function () {
+                    if(ladron.alive){
+                    game.physics.arcade.moveToObject(policia, ladron, 100);
+                }
+                else{
+                    band=false;
+                    if(gorroLadron.alive){
+                        gorroLadron.kill();
+                        gorroPolicia.kill();
+                    }
+                    ladron.reset(game.rnd.integerInRange(0,800),game.rnd.integerInRange(0,600));
+                }
+//                    console.log(Phaser.Math.angleBetween(policia.body.x, policia.body.y , ladron.body.x , ladron.body.y));
+                    if((Phaser.Math.distance(policia.body.x, policia.body.y , ladron.body.x , ladron.body.y))<100){
+                        if(band===false){
+                        this.ponerGorros();
+                    }
+//                        console.log("menor!!");
+                        ladron.body.velocity.x=policia.body.velocity.x;
+                        ladron.body.velocity.y=policia.body.velocity.y;
+                        
+                        if(gorroLadron.alive){
+                        gorroLadron.body.velocity.x=policia.body.velocity.x;
+                        gorroLadron.body.velocity.y=policia.body.velocity.y;
+                        gorroPolicia.body.velocity.x=policia.body.velocity.x;
+                        gorroPolicia.body.velocity.y=policia.body.velocity.y;
+                    }
+                    else
+                    {
+                        console.log("pasaa");
+                        gorroPolicia.kill();
+                        
+                    }
+                        
+
+                    }
+                    else{
+                    ladron.body.velocity.x=movX;
+                    
+                    ladron.body.velocity.y=movY;
+                }
+                },
+                
+                ponerGorros: function(){
+                    gorroPolicia = game.add.sprite(policia.body.x, policia.body.y-30, 'alarma');
+//                    gorroPolicia = game.add.sprite(policia.body.x+30, policia.body.y-30, 'alarma');
+                    game.physics.enable(gorroPolicia, Phaser.Physics.ARCADE);
+                    gorroLadron = game.add.sprite(ladron.body.x+5, ladron.body.y-20, 'gorro');
+//                    gorroLadron = game.add.sprite(ladron.body.x+3, ladron.body.y+3, 'gorro');
+                    game.physics.enable(gorroLadron, Phaser.Physics.ARCADE);
+                    gorroLadron.checkWorldBounds = true;
+                    gorroLadron.outOfBoundsKill = true;
+                    sirena.play();
+                    band=true;
+                }
+                
+            };
+
+            //Creo el juego con sus dimensiones  y estados necesarios para la ejecucion
+            var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game');
+            game.state.add('jugar', estadoJugando);
+            game.state.start('jugar');
+
+        </script>
+    </body>
+</html>
