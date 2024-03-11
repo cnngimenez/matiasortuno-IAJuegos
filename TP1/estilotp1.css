@@ -22,7 +22,7 @@ header #tit{
     background: #ffffff;
     text-align: center;
     font-size:40px;
-    font-family: fantasy;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: bold;
 }
 #bienvenidos h2{
@@ -32,7 +32,7 @@ header #tit{
 }
 
 #bienvenidos{
-    font-family: fantasy;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-size:20px;
     color: white;
     background: #3893d4;
@@ -50,7 +50,7 @@ body{
 #actual{
     color:white;
     font-weight: bold;
-    font-family: fantasy;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-decoration: bold;
 }
 
